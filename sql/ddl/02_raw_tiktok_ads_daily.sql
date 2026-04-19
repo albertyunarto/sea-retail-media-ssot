@@ -1,0 +1,31 @@
+CREATE TABLE IF NOT EXISTS `${GCP_PROJECT}.${RAW_DATASET}.tiktok_ads_daily` (
+  Date                         DATE,
+  Advertiser_id                STRING,
+  Campaign_id                  STRING,
+  Campaign_name                STRING,
+  Objective_type               STRING,
+  Ad_group_id                  STRING,
+  Ad_group_name                STRING,
+  Ad_id                        STRING,
+  Ad_name                      STRING,
+  Country_code                 STRING,
+  Currency                     STRING,
+  Spend                        NUMERIC,
+  Impressions                  INT64,
+  Clicks                       INT64,
+  Ctr                          FLOAT64,
+  Cpc                          NUMERIC,
+  Video_play_6s                INT64,
+  Complete_payment             INT64,
+  Complete_payment_value       NUMERIC,
+  Skan_complete_payment        INT64,
+  Conversion_attribution_window STRING,
+  _source_system               STRING,
+  _market                      STRING,
+  _accounts                    STRING,
+  _window_start                DATE,
+  _window_end                  DATE,
+  ingested_at                  TIMESTAMP
+)
+PARTITION BY DATE(ingested_at)
+CLUSTER BY _market, Advertiser_id, Campaign_id;

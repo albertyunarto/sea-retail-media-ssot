@@ -1,0 +1,48 @@
+# Channel taxonomy — documents the rule for each channel in mart.daily_channel_panel.
+# The same mapping is enforced in SQL (sql/mart/01_daily_channel_panel.sql).
+# This file is the human-readable reference used by analytics & marketing.
+
+channels:
+  - channel: shopee_organic
+    platform: shopee
+    rule: "fact_platform_sales where platform='shopee' — no spend; represents non-ads contribution on the day."
+
+  - channel: shopee_ads_product_search
+    platform: shopee
+    rule: "fact_onplatform_ads where platform='shopee_ads' and ad_type='product_search'."
+
+  - channel: shopee_ads_shop_search
+    platform: shopee
+    rule: "fact_onplatform_ads where platform='shopee_ads' and ad_type='shop_search'."
+
+  - channel: shopee_ads_targeting
+    platform: shopee
+    rule: "fact_onplatform_ads where platform='shopee_ads' and ad_type='targeting'."
+
+  - channel: shopee_ads_gmv_max
+    platform: shopee
+    rule: "fact_onplatform_ads where platform='shopee_ads' and ad_type='gmv_max'."
+
+  - channel: tiktok_shop_organic
+    platform: tiktok_shop
+    rule: "fact_platform_sales where platform='tiktok_shop' — no spend; represents non-ads contribution."
+
+  - channel: tiktok_shop_live
+    platform: tiktok_shop
+    rule: "fact_platform_sales where platform='tiktok_shop' and traffic_source='live' (derived from traffic_source_mix)."
+
+  - channel: tiktok_shop_video
+    platform: tiktok_shop
+    rule: "fact_platform_sales where platform='tiktok_shop' and traffic_source='video' (derived from traffic_source_mix)."
+
+  - channel: tiktok_ads
+    platform: tiktok_shop
+    rule: "fact_onplatform_ads where platform='tiktok_ads'."
+
+  - channel: meta_cpas
+    platform: shopee
+    rule: "fact_offplatform_ads where platform='meta_cpas' (destination_platform can be 'shopee' or 'tiktok_shop')."
+
+  - channel: google_ads_shopee
+    platform: shopee
+    rule: "fact_offplatform_ads where platform='google_ads_shopee'."

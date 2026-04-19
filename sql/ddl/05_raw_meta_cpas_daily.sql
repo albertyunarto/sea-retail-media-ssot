@@ -1,0 +1,31 @@
+CREATE TABLE IF NOT EXISTS `${GCP_PROJECT}.${RAW_DATASET}.meta_cpas_daily` (
+  Date                       DATE,
+  Account_id                 STRING,
+  Campaign_id                STRING,
+  Campaign_name              STRING,
+  Adset_id                   STRING,
+  Adset_name                 STRING,
+  Ad_id                      STRING,
+  Objective                  STRING,
+  Catalog_id                 STRING,
+  Partner_id                 STRING,
+  Country                    STRING,
+  Currency                   STRING,
+  Spend                      NUMERIC,
+  Impressions                INT64,
+  Reach                      INT64,
+  Link_clicks                INT64,
+  Add_to_cart                INT64,
+  Purchase                   INT64,
+  Purchase_value             NUMERIC,
+  Roas                       FLOAT64,
+  Attribution_window         STRING,
+  _source_system             STRING,
+  _market                    STRING,
+  _accounts                  STRING,
+  _window_start              DATE,
+  _window_end                DATE,
+  ingested_at                TIMESTAMP
+)
+PARTITION BY DATE(ingested_at)
+CLUSTER BY _market, Account_id, Campaign_id;

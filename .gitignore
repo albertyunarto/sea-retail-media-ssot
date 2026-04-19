@@ -1,0 +1,22 @@
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.env
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+# secrets
+*.json
+!package.json
+!package-lock.json
+!cloudbuild.yaml
+*.key
+sa-key.*
+# local
+.DS_Store
+.idea/
+.vscode/
+dist/
+build/

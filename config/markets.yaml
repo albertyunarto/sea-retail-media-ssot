@@ -1,0 +1,71 @@
+# Market → account ID mapping.
+# Populate with the brand-owned advertiser_ids / shop_ids per market per platform.
+# Extractors call Supermetrics once per market, so this file drives fan-out.
+
+markets:
+
+  ID:
+    market: ID
+    timezone: Asia/Jakarta
+    currency: IDR
+    tiktok_ads:       []   # e.g. ["7123456789012345678"]
+    shopee_ads:       []   # e.g. ["shop_id:12345"]
+    meta_cpas:        []   # e.g. ["act_1234567890"]
+    google_ads:       []   # e.g. ["1234567890"]
+    shopee_commerce:  []
+    tiktok_shop:      []
+
+  TH:
+    market: TH
+    timezone: Asia/Bangkok
+    currency: THB
+    tiktok_ads: []
+    shopee_ads: []
+    meta_cpas: []
+    google_ads: []
+    shopee_commerce: []
+    tiktok_shop: []
+
+  VN:
+    market: VN
+    timezone: Asia/Ho_Chi_Minh
+    currency: VND
+    tiktok_ads: []
+    shopee_ads: []
+    meta_cpas: []
+    google_ads: []
+    shopee_commerce: []
+    tiktok_shop: []
+
+  MY:
+    market: MY
+    timezone: Asia/Kuala_Lumpur
+    currency: MYR
+    tiktok_ads: []
+    shopee_ads: []
+    meta_cpas: []
+    google_ads: []
+    shopee_commerce: []
+    tiktok_shop: []
+
+  SG:
+    market: SG
+    timezone: Asia/Singapore
+    currency: SGD
+    tiktok_ads: []
+    shopee_ads: []
+    meta_cpas: []
+    google_ads: []
+    shopee_commerce: []
+    tiktok_shop: []
+
+  PH:
+    market: PH
+    timezone: Asia/Manila
+    currency: PHP
+    tiktok_ads: []
+    shopee_ads: []
+    meta_cpas: []
+    google_ads: []
+    shopee_commerce: []
+    tiktok_shop: []

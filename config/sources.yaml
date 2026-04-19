@@ -1,0 +1,197 @@
+# Supermetrics connector configs.
+#
+# ds_id codes vary by contract. Values below are sensible defaults for the
+# modern Supermetrics Enterprise API — verify against the connector list your
+# team has entitlement to. Field names are case-sensitive and follow the
+# Supermetrics field catalogue. If a field doesn't exist for your account,
+# remove it here and the raw DDL accordingly.
+#
+# To configure: check your Supermetrics team's https://api.supermetrics.com/enterprise/v2/catalog
+# endpoint for the exact ds_id + field names you have access to.
+
+sources:
+
+  tiktok_shop:
+    name: tiktok_shop
+    ds_id: "TTS"                 # TikTok Shop — confirm against your catalog
+    raw_table: "${GCP_PROJECT}.raw_supermetrics.tiktok_shop_orders"
+    date_field: "Date"
+    date_range_type: "custom"
+    n_days: 14
+    fields:
+      - Date
+      - Order_id
+      - Order_status
+      - Order_create_time
+      - Payment_time
+      - Buyer_country
+      - Shop_id
+      - Sku_id
+      - Product_id
+      - Quantity
+      - Original_price
+      - Sub_total
+      - Order_amount
+      - Currency
+      - Shipping_fee
+      - Order_source
+      - Affiliate_creator_id
+    natural_keys: [Order_id, Sku_id]
+    notes: "Order-level. Freshness ~T-7 due to return window."
+
+  tiktok_ads:
+    name: tiktok_ads
+    ds_id: "TT"                  # TikTok Ads
+    raw_table: "${GCP_PROJECT}.raw_supermetrics.tiktok_ads_daily"
+    date_field: "Date"
+    n_days: 14
+    fields:
+      - Date
+      - Advertiser_id
+      - Campaign_id
+      - Campaign_name
+      - Objective_type
+      - Ad_group_id
+      - Ad_group_name
+      - Ad_id
+      - Ad_name
+      - Country_code
+      - Currency
+      - Spend
+      - Impressions
+      - Clicks
+      - Ctr
+      - Cpc
+      - Video_play_6s
+      - Complete_payment
+      - Complete_payment_value
+      - Skan_complete_payment
+      - Conversion_attribution_window
+    natural_keys: [Date, Advertiser_id, Campaign_id, Ad_group_id, Ad_id]
+    notes: "Pull with the 7d_click_1d_view attribution window."
+
+  shopee_commerce:
+    name: shopee_commerce
+    ds_id: "SHP"                 # Shopee Seller / Commerce
+    raw_table: "${GCP_PROJECT}.raw_supermetrics.shopee_orders"
+    date_field: "Date"
+    n_days: 14
+    fields:
+      - Date
+      - Order_sn
+      - Order_status
+      - Create_time
+      - Pay_time
+      - Complete_time
+      - Buyer_id_hash
+      - Shop_id
+      - Country
+      - Sku
+      - Item_id
+      - Quantity
+      - Merchandise_subtotal
+      - Escrow_amount
+      - Currency
+      - Logistics_status
+      - Voucher_platform
+      - Voucher_seller
+      - Traffic_source
+    natural_keys: [Order_sn, Sku]
+    notes: "Use Merchandise_subtotal for GMV, not Escrow_amount."
+
+  shopee_ads:
+    name: shopee_ads
+    ds_id: "SHPA"                # Shopee Ads
+    raw_table: "${GCP_PROJECT}.raw_supermetrics.shopee_ads_daily"
+    date_field: "Date"
+    n_days: 14
+    fields:
+      - Date
+      - Shop_id
+      - Country
+      - Currency
+      - Ad_type
+      - Campaign_id
+      - Campaign_name
+      - Sku_id
+      - Keyword
+      - Match_type
+      - Spend
+      - Voucher_subsidy
+      - Impressions
+      - Clicks
+      - Direct_orders
+      - Broad_orders
+      - Direct_gmv
+      - Broad_gmv
+      - Attribution_window
+    natural_keys: [Date, Shop_id, Campaign_id, Ad_type, Keyword]
+    notes: "Drop Keyword row-level to fact_onplatform_ads_keyword in a later iteration."
+
+  meta_cpas:
+    name: meta_cpas
+    ds_id: "FA"                  # Facebook Ads
+    raw_table: "${GCP_PROJECT}.raw_supermetrics.meta_cpas_daily"
+    date_field: "Date"
+    n_days: 14
+    filter_expressions:
+      # Keep only CPAS catalog-sales campaigns. Replace the partner catalog IDs with your brand's.
+      - { field: Objective,   operator: CONTAINS,  value: "CATALOG_SALES" }
+      # - { field: Catalog_id, operator: IN_LIST,   value: ["XXXXXXXXXXXXX","YYYYYYYYYYYYY"] }
+    fields:
+      - Date
+      - Account_id
+      - Campaign_id
+      - Campaign_name
+      - Adset_id
+      - Adset_name
+      - Ad_id
+      - Objective
+      - Catalog_id
+      - Partner_id
+      - Country
+      - Currency
+      - Spend
+      - Impressions
+      - Reach
+      - Link_clicks
+      - Add_to_cart
+      - Purchase
+      - Purchase_value
+      - Roas
+      - Attribution_window
+    natural_keys: [Date, Account_id, Campaign_id, Adset_id, Ad_id]
+    notes: "Add partner_catalog_id IN_LIST filter once brand provides IDs."
+
+  google_ads_shopee:
+    name: google_ads_shopee
+    ds_id: "AW"                  # Google Ads (legacy code name 'AdWords')
+    raw_table: "${GCP_PROJECT}.raw_supermetrics.google_ads_shopee_daily"
+    date_field: "Date"
+    n_days: 14
+    filter_expressions:
+      # Prefer campaign-name prefix (e.g. SHP_) so Demand Gen / Video rows are
+      # captured even when final_url isn't returned.
+      - { field: Campaign_name, operator: STARTS_WITH, value: "SHP_" }
+    fields:
+      - Date
+      - Customer_id
+      - Campaign_id
+      - Campaign_name
+      - Campaign_type
+      - Ad_group_id
+      - Ad_group_name
+      - Keyword
+      - Final_url
+      - Country
+      - Currency
+      - Cost_micros
+      - Spend
+      - Impressions
+      - Clicks
+      - Conversions
+      - Conversion_value
+      - All_conversions
+      - Attribution_model
+    natural_keys: [Date, Customer_id, Campaign_id, Ad_group_id, Keyword]
+    notes: "Staging view additionally filters by final_url regex for safety."
