@@ -89,6 +89,44 @@ The dashboard runs without any GCP credentials by default (mock mode).
 With `NEXT_PUBLIC_USE_MOCK=0` + `GCP_PROJECT` set + a service-account key,
 it reads live from `mart.daily_channel_panel` / `daily_channel_panel_evc`.
 
+## Deploy to Vercel
+
+The dashboard lives in a subdirectory (`dashboard/`) of the main Python repo,
+so the import flow has one extra step:
+
+1. **Import** — Vercel dashboard → New Project → import
+   `albertyunarto/sea-retail-media-ssot`.
+2. **Root Directory** — set this to `dashboard`. Vercel detects Next.js
+   automatically from there and picks up `dashboard/vercel.json`.
+3. **Build / install commands** — leave as the auto-detected defaults
+   (`next build` / `npm install`).
+4. **Environment variables** — minimum:
+   - For a pure demo (no GCP needed): set `NEXT_PUBLIC_USE_MOCK=1` and
+     nothing else. The dashboard ships with deterministic mock data that
+     matches the PRD-A narrative — enough for a live URL you can share.
+   - For live BigQuery: set `NEXT_PUBLIC_USE_MOCK=0`, `GCP_PROJECT`,
+     `BQ_LOCATION`, `MART_DATASET`, and paste the service-account JSON
+     into `GOOGLE_APPLICATION_CREDENTIALS_JSON` (NOT
+     `GOOGLE_APPLICATION_CREDENTIALS` — Vercel has no filesystem to
+     point at).
+   - Optional: set `DEMO_ACCESS_CODE=<some-string>` to gate the dashboard
+     behind `?code=<some-string>` on first visit.
+5. **Deploy.** First build takes ~90 s; subsequent builds land in ~25 s.
+
+### Gotchas
+
+- `@google-cloud/bigquery` ships native-ish deps (grpc + protobuf). It
+  runs fine on Vercel's Node.js runtime but **would fail on Edge** — so
+  the pages and routes that touch it stay on Node (enforced via
+  `vercel.json`). Don't add `export const runtime = "edge"` to any page
+  that imports `lib/bq.ts` or `lib/panel-data.ts`.
+- The middleware (`middleware.ts`) runs on Edge by default, but only
+  uses `NextRequest` / `NextResponse` / cookies — all Edge-safe.
+- Serverless function size budget: the full build lands around 30 MB —
+  well under the 50 MB Hobby / 250 MB Pro cap.
+- Paste the service-account JSON as a **Sensitive** env var so it isn't
+  rendered in build logs.
+
 ## Environment variables
 
 | var | required | purpose |
