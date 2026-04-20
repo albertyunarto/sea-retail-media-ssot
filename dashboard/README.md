@@ -97,7 +97,7 @@ so the import flow has one extra step:
 1. **Import** — Vercel dashboard → New Project → import
    `albertyunarto/sea-retail-media-ssot`.
 2. **Root Directory** — set this to `dashboard`. Vercel detects Next.js
-   automatically from there and picks up `dashboard/vercel.json`.
+   automatically from there.
 3. **Build / install commands** — leave as the auto-detected defaults
    (`next build` / `npm install`).
 4. **Environment variables** — minimum:
@@ -116,10 +116,10 @@ so the import flow has one extra step:
 ### Gotchas
 
 - `@google-cloud/bigquery` ships native-ish deps (grpc + protobuf). It
-  runs fine on Vercel's Node.js runtime but **would fail on Edge** — so
-  the pages and routes that touch it stay on Node (enforced via
-  `vercel.json`). Don't add `export const runtime = "edge"` to any page
-  that imports `lib/bq.ts` or `lib/panel-data.ts`.
+  runs fine on Vercel's Node.js runtime (the App Router default for
+  server components + route handlers), but **would fail on Edge** — so
+  don't add `export const runtime = "edge"` to any page that imports
+  `lib/bq.ts` or `lib/panel-data.ts`.
 - The middleware (`middleware.ts`) runs on Edge by default, but only
   uses `NextRequest` / `NextResponse` / cookies — all Edge-safe.
 - Serverless function size budget: the full build lands around 30 MB —
