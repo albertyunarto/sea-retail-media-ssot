@@ -57,6 +57,7 @@ export default function Masthead({ filters }: { filters: Filters }) {
     >
       {/* Status strip */}
       <div
+        className="pad-responsive flex-wrap-mobile"
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -103,8 +104,11 @@ export default function Masthead({ filters }: { filters: Filters }) {
           >
             SIMULATED DATA
           </span>
-          <span>Refreshed 02:07 SGT · T−1 final</span>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+          <span className="hide-mobile">Refreshed 02:07 SGT · T−1 final</span>
+          <span
+            className="hide-mobile"
+            style={{ display: "inline-flex", alignItems: "center", gap: 6 }}
+          >
             <span
               style={{
                 width: 6,
@@ -120,6 +124,7 @@ export default function Masthead({ filters }: { filters: Filters }) {
 
       {/* Title row */}
       <div
+        className="pad-responsive"
         style={{
           display: "flex",
           alignItems: "flex-end",
@@ -190,6 +195,7 @@ export default function Masthead({ filters }: { filters: Filters }) {
       {/* Lens strip — only on overview */}
       {onOverview && (
         <div
+          className="pad-responsive scroll-x-mobile"
           style={{
             display: "flex",
             alignItems: "stretch",
@@ -230,12 +236,15 @@ export default function Masthead({ filters }: { filters: Filters }) {
 
       {/* Filter bar */}
       <div
+        className="pad-responsive"
         style={{
           display: "flex",
           alignItems: "center",
           gap: 0,
           padding: "0 32px",
-          height: 36,
+          minHeight: 36,
+          flexWrap: "wrap",
+          rowGap: 0,
           borderBottom: `1px solid ${C.rule}`,
           fontFamily: FONT.mono,
           fontSize: 11,

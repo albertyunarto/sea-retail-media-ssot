@@ -39,9 +39,13 @@ export function DecompositionLens({
   const gmvDelta = story.blended.gmvDelta ?? 0;
 
   return (
-    <div style={{ background: C.paper, padding: "24px 32px 48px" }}>
+    <div
+      className="pad-responsive"
+      style={{ background: C.paper, padding: "24px 32px 48px" }}
+    >
       {/* Header */}
       <div
+        className="flex-wrap-mobile"
         style={{
           display: "flex",
           alignItems: "baseline",
@@ -90,13 +94,16 @@ export function DecompositionLens({
           byline="contribution to platform GMV Δ, by channel"
         />
         <div
+          className="scroll-x-mobile"
           style={{
             border: `1px solid ${C.rule}`,
             padding: "12px 12px 4px",
             background: C.paper,
           }}
         >
-          <Waterfall items={waterfallItems} height={260} />
+          <div className="min-w-chart">
+            <Waterfall items={waterfallItems} height={260} />
+          </div>
         </div>
       </div>
 
@@ -138,8 +145,13 @@ export function DecompositionLens({
           title="Where the money goes — and what it earns"
           byline="bar width = share of working spend · height = ROAS · dashed line = blended"
         />
-        <div style={{ border: `1px solid ${C.rule}`, padding: 16, background: C.paper }}>
-          <Marimekko items={mosaicItems} height={320} />
+        <div
+          className="scroll-x-mobile"
+          style={{ border: `1px solid ${C.rule}`, padding: 16, background: C.paper }}
+        >
+          <div className="min-w-chart">
+            <Marimekko items={mosaicItems} height={320} />
+          </div>
         </div>
         <p
           style={{

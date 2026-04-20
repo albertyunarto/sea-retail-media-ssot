@@ -28,9 +28,13 @@ export function DecisionsLens({
   const channelLabel = CHANNELS.find((c) => c.id === focused)?.label ?? focused;
 
   return (
-    <div style={{ background: C.paper, padding: "24px 32px 48px" }}>
+    <div
+      className="pad-responsive"
+      style={{ background: C.paper, padding: "24px 32px 48px" }}
+    >
       {/* Header strip */}
       <div
+        className="flex-wrap-mobile"
         style={{
           display: "flex",
           alignItems: "baseline",
@@ -91,6 +95,7 @@ export function DecisionsLens({
 
       {/* Evidence panel + watchlist */}
       <div
+        className="stack-tablet"
         style={{
           display: "grid",
           gridTemplateColumns: "1.4fr 1fr",
@@ -154,6 +159,7 @@ function DecisionCard({
 
   return (
     <div
+      className="decision-card"
       style={{
         display: "grid",
         gridTemplateColumns: "88px minmax(0, 1fr) 300px 200px",
@@ -175,7 +181,7 @@ function DecisionCard({
         <div
           style={{
             fontFamily: FONT.serif,
-            fontSize: 56,
+            fontSize: "clamp(36px, 9vw, 56px)",
             fontWeight: 400,
             lineHeight: 0.85,
             color: C.ink,
@@ -254,6 +260,7 @@ function DecisionCard({
 
         {/* Evidence table */}
         <div
+          className="flex-wrap-mobile"
           style={{
             display: "inline-grid",
             gridAutoFlow: "column",

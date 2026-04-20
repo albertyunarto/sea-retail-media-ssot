@@ -81,6 +81,7 @@ export function ChannelBrief({
     <div style={{ background: C.paper }}>
       {/* Header block */}
       <section
+        className="pad-responsive"
         style={{
           padding: "28px 32px 18px",
           borderBottom: `2px solid ${C.rule}`,
@@ -133,6 +134,7 @@ export function ChannelBrief({
 
       {/* 6-up KPI strip */}
       <section
+        className="pad-responsive"
         style={{
           padding: "24px 32px",
           borderBottom: `1px solid ${C.rule}`,
@@ -143,6 +145,7 @@ export function ChannelBrief({
         }}
       >
         <div
+          className="kpi-strip-6"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(6, 1fr)",
@@ -183,6 +186,7 @@ export function ChannelBrief({
 
       {/* Time series */}
       <section
+        className="stack-tablet pad-responsive"
         style={{
           padding: "24px 32px",
           borderBottom: `1px solid ${C.rule}`,
@@ -233,6 +237,7 @@ export function ChannelBrief({
 
       {/* Per-market breakdown */}
       <section
+        className="pad-responsive"
         style={{
           padding: "24px 32px",
           borderBottom: `1px solid ${C.rule}`,
@@ -244,6 +249,7 @@ export function ChannelBrief({
           byline="sorted by spend"
         />
         <div
+          className="cols-2-mobile"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
@@ -327,14 +333,14 @@ export function ChannelBrief({
                   }
                 />
               </div>
-              <Sparkline values={m.trend} color={channelColor} width={260} height={24} fill />
+              <Sparkline values={m.trend} color={channelColor} width="100%" height={24} fill />
             </article>
           ))}
         </div>
       </section>
 
       {/* Market × Day Heatmap */}
-      <section style={{ padding: "24px 32px 48px" }}>
+      <section className="pad-responsive" style={{ padding: "24px 32px 48px" }}>
         <SectionHead
           kicker="Pattern"
           title="Market × day spend heatmap"
