@@ -132,6 +132,31 @@ These are the open items from §10 of the architecture doc:
 4. `sql/seeds/02_dim_fx_rate.sql` — replace the one-row placeholder with a daily FX backfill (scheduled query from a BQ public dataset, or a small adjacent pipeline).
 5. `config/sources.yaml → ds_id` — confirm the Supermetrics data-source codes (`TT`, `TTS`, `SHP`, `SHPA`, `FA`, `AW`) match what your Supermetrics team contract exposes. Query the catalog endpoint to verify: `POST https://api.supermetrics.com/enterprise/v2/catalog`.
 
+## Running the demo (no Supermetrics contract needed)
+
+The `ssot.sim` sub-package generates reproducible synthetic data for the
+fictional **Elysium Home Care** brand so the full pipeline can be demoed
+end-to-end without a live Supermetrics account or real advertiser IDs.
+
+```bash
+pip install -e '.[dev,sim]'
+
+export GCP_PROJECT=<your-demo-project>
+ssot bootstrap                                     # creates datasets incl. raw_custom_apis
+gen-data run --mode=bq --seed=42 --days=180        # ~40 s generation
+ssot transform --stage staging,fact,mart,evc       # runs full transform + EVC stage
+gen-data verify                                    # 10 invariant SQLs, expect 10/10 PASS
+```
+
+Outputs:
+- `mart.daily_channel_panel` populated across 6 markets × ~11 channels × 180 days.
+- `mart.daily_channel_panel_evc` — same grain plus EVC columns for the
+  reported-vs-EVC-adjusted toggle story.
+- `raw_custom_apis.evc_{google,meta,tiktok}` — Google / Meta / TikTok custom-API
+  extension tables for EVC.
+
+Full docs: [`docs/simulation.md`](docs/simulation.md).
+
 ## Modeling consumers
 
 `mart.daily_channel_panel` is the sole consumer-facing table. Three common use cases:

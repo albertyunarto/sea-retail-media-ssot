@@ -1,0 +1,48 @@
+# Named scenario overlays — applied in memory to SimConfig before engine runs.
+# Each patch targets a dotted path on SimConfig via `op: set|mul|add`.
+
+scenarios:
+
+  competitor_launch:
+    name: competitor_launch
+    description: "Rival brand launches aggressive price promo; ROAS compresses ~20% across all paid channels."
+    patches:
+      - { path: "priors.channels.shopee_ads_product_search.baseline_roas", op: mul, value: 0.8 }
+      - { path: "priors.channels.shopee_ads_gmv_max.baseline_roas",         op: mul, value: 0.8 }
+      - { path: "priors.channels.tiktok_ads.baseline_roas",                 op: mul, value: 0.8 }
+      - { path: "priors.channels.meta_cpas.baseline_roas",                  op: mul, value: 0.85 }
+      - { path: "priors.channels.google_ads_shopee.baseline_roas",          op: mul, value: 0.85 }
+
+  supply_shortage:
+    name: supply_shortage
+    description: "Stockouts in laundry category reduce organic platform GMV by 50% for 3 weeks."
+    patches:
+      - { path: "priors.organic.shopee.baseline_daily_gmv_sgd",     op: mul, value: 0.5 }
+      - { path: "priors.organic.tiktok_shop.baseline_daily_gmv_sgd", op: mul, value: 0.5 }
+
+  algo_change:
+    name: algo_change
+    description: "Platform algorithm update drops TikTok Ads CTR by 30%; recover partially over 2 weeks."
+    patches:
+      - { path: "priors.channels.tiktok_ads.ctr", op: mul, value: 0.7 }
+
+  viral_moment:
+    name: viral_moment
+    description: "Organic TikTok Shop video spikes (+200%) for the launch SKU."
+    patches:
+      - { path: "priors.organic.tiktok_shop.baseline_daily_gmv_sgd", op: mul, value: 3.0 }
+
+  price_war:
+    name: price_war
+    description: "Category-wide discounting; CVR lifts ~15% but margin compresses across all channels."
+    patches:
+      - { path: "priors.channels.shopee_ads_product_search.cvr", op: mul, value: 1.15 }
+      - { path: "priors.channels.shopee_ads_gmv_max.cvr",         op: mul, value: 1.15 }
+      - { path: "priors.channels.tiktok_ads.cvr",                 op: mul, value: 1.15 }
+
+  category_headwind:
+    name: category_headwind
+    description: "Beauty category faces macro demand dip (-25% baseline)."
+    patches:
+      - { path: "priors.organic.shopee.baseline_daily_gmv_sgd",     op: mul, value: 0.82 }
+      - { path: "priors.organic.tiktok_shop.baseline_daily_gmv_sgd", op: mul, value: 0.82 }
