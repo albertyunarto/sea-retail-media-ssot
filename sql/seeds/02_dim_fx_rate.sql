@@ -13,11 +13,14 @@ CREATE TABLE IF NOT EXISTS `${GCP_PROJECT}.${SEED_DATASET}.dim_fx_rate` (
 PARTITION BY date
 CLUSTER BY currency;
 
--- Seed a single row so staging queries don't fail on first run. Replace with a daily job.
+-- Seed rows so staging queries don't fail on first run. Replace with a daily job.
+-- For the simulation demo we backfill a 2-year window (2025-01-01 .. 2026-12-31)
+-- with flat indicative rates; in production, overwrite with your FX provider.
 MERGE `${GCP_PROJECT}.${SEED_DATASET}.dim_fx_rate` T
 USING (
-  SELECT DATE '2026-04-01' AS date, cur AS currency, rate AS usd_rate
-  FROM UNNEST([
+  SELECT d AS date, cur AS currency, rate AS usd_rate
+  FROM UNNEST(GENERATE_DATE_ARRAY(DATE '2025-01-01', DATE '2026-12-31')) AS d
+  CROSS JOIN UNNEST([
     STRUCT('IDR' AS cur, 16800.0 AS rate),
     STRUCT('THB', 36.0),
     STRUCT('VND', 25400.0),

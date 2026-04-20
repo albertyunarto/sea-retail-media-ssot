@@ -30,6 +30,9 @@ ORDER = [
     "fact",
     # mart (CREATE OR REPLACE TABLE)
     "mart",
+    # EVC extension (custom-APIs): stg_evc + fact_evc + daily_channel_panel_evc.
+    # Runs after mart because the EVC mart table reads daily_channel_panel.
+    "evc",
 ]
 
 
@@ -41,6 +44,7 @@ def _substitutions() -> dict:
         "FACT_DATASET": os.environ.get("FACT_DATASET", "fact"),
         "MART_DATASET": os.environ.get("MART_DATASET", "mart"),
         "SEED_DATASET": os.environ.get("SEED_DATASET", "seeds"),
+        "EVC_DATASET": os.environ.get("EVC_DATASET", "raw_custom_apis"),
     }
 
 

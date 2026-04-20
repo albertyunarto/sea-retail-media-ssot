@@ -1,0 +1,158 @@
+# Day-of-week, payday, and named-event overlays applied on top of the base
+# response curve. Multipliers are multiplicative with base demand.
+#
+# Horizon assumption: ~180 days ending late April 2026. Covers:
+#   - 11.11 (Nov 2025), 12.12 (Dec 2025), Harbolnas (Dec 2025)
+#   - New Year, 1.1 / 2.2 / 3.3 / 4.4 minor pulses
+#   - Chinese New Year / Lunar NY (Feb 17, 2026)
+#   - Ramadan 2026 (~Feb 18 → Mar 20) + Hari Raya Idul Fitri (~Mar 20-21)
+#
+# dow_multiplier: Mon..Sun (Friday-Sunday uplift reflects weekend promo cadence)
+# payday_days: days-of-month that get payday_uplift (SEA: 1st, 15th, 16th)
+# events: named windows; `markets=[]` means all markets
+
+dow_multiplier:
+  Mon: 0.95
+  Tue: 0.90
+  Wed: 0.90
+  Thu: 0.95
+  Fri: 1.05
+  Sat: 1.15
+  Sun: 1.10
+
+payday_days: [1, 15, 16]
+payday_uplift: 1.25
+
+events:
+  # ---- Late 2025 mega-sales ----
+  - name: "11.11 ramp"
+    kind: mega_sale
+    markets: []
+    start: 2025-11-05
+    end:   2025-11-10
+    uplift_mult: 1.6
+  - name: "11.11 peak"
+    kind: mega_sale
+    markets: []
+    start: 2025-11-11
+    end:   2025-11-11
+    uplift_mult: 3.8
+  - name: "11.11 tail"
+    kind: mega_sale
+    markets: []
+    start: 2025-11-12
+    end:   2025-11-13
+    uplift_mult: 1.3
+
+  - name: "12.12 ramp"
+    kind: mega_sale
+    markets: []
+    start: 2025-12-06
+    end:   2025-12-11
+    uplift_mult: 1.5
+  - name: "12.12 peak"
+    kind: mega_sale
+    markets: []
+    start: 2025-12-12
+    end:   2025-12-12
+    uplift_mult: 3.2
+  - name: "12.12 tail"
+    kind: mega_sale
+    markets: []
+    start: 2025-12-13
+    end:   2025-12-14
+    uplift_mult: 1.25
+
+  - name: "Harbolnas ID"
+    kind: mega_sale
+    markets: [ID]
+    start: 2025-12-10
+    end:   2025-12-15
+    uplift_mult: 1.4
+
+  - name: "Christmas week"
+    kind: festival
+    markets: [SG, PH, MY]
+    start: 2025-12-20
+    end:   2025-12-26
+    uplift_mult: 1.2
+
+  # ---- Q1 2026 small pulses ----
+  - name: "1.1 sale"
+    kind: mega_sale
+    markets: []
+    start: 2026-01-01
+    end:   2026-01-02
+    uplift_mult: 1.5
+  - name: "2.2 sale"
+    kind: mega_sale
+    markets: []
+    start: 2026-02-02
+    end:   2026-02-02
+    uplift_mult: 1.3
+  - name: "3.3 sale"
+    kind: mega_sale
+    markets: []
+    start: 2026-03-03
+    end:   2026-03-03
+    uplift_mult: 1.35
+  - name: "4.4 sale"
+    kind: mega_sale
+    markets: []
+    start: 2026-04-04
+    end:   2026-04-04
+    uplift_mult: 1.35
+
+  # ---- CNY / Lunar NY ----
+  - name: "CNY lead-up"
+    kind: festival
+    markets: [SG, MY, VN, PH, TH]
+    start: 2026-02-10
+    end:   2026-02-16
+    uplift_mult: 1.35
+  - name: "CNY peak"
+    kind: festival
+    markets: [SG, MY, VN, PH, TH]
+    start: 2026-02-17
+    end:   2026-02-19
+    uplift_mult: 1.55
+  - name: "Tet VN"
+    kind: festival
+    markets: [VN]
+    start: 2026-02-15
+    end:   2026-02-22
+    uplift_mult: 1.6
+
+  # ---- Ramadan / Lebaran ----
+  - name: "Ramadan ramp"
+    kind: ramadan
+    markets: [ID, MY]
+    start: 2026-02-18
+    end:   2026-03-10
+    uplift_mult: 1.4
+  - name: "Ramadan Lebaran week"
+    kind: ramadan
+    markets: [ID, MY]
+    start: 2026-03-11
+    end:   2026-03-19
+    uplift_mult: 1.8
+  - name: "Hari Raya peak"
+    kind: festival
+    markets: [ID, MY]
+    start: 2026-03-20
+    end:   2026-03-22
+    uplift_mult: 2.1
+  - name: "Post-Lebaran lull"
+    kind: festival
+    markets: [ID, MY]
+    start: 2026-03-23
+    end:   2026-03-29
+    uplift_mult: 0.75
+
+  # ---- April / ongoing ----
+  - name: "Songkran TH"
+    kind: festival
+    markets: [TH]
+    start: 2026-04-13
+    end:   2026-04-15
+    uplift_mult: 1.4

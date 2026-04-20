@@ -104,15 +104,16 @@ def transform(stage: str | None) -> None:
 def bootstrap() -> None:
     """Create datasets and run seed + DDL (idempotent). Run once per env."""
     _, bq = _clients()
-    for ds in ("RAW_DATASET", "STG_DATASET", "FACT_DATASET", "MART_DATASET", "SEED_DATASET"):
-        name = os.environ.get(ds, {
-            "RAW_DATASET": "raw_supermetrics",
-            "STG_DATASET": "stg",
-            "FACT_DATASET": "fact",
-            "MART_DATASET": "mart",
-            "SEED_DATASET": "seeds",
-        }[ds])
-        bq.ensure_dataset(name)
+    dataset_defaults = {
+        "RAW_DATASET":  "raw_supermetrics",
+        "STG_DATASET":  "stg",
+        "FACT_DATASET": "fact",
+        "MART_DATASET": "mart",
+        "SEED_DATASET": "seeds",
+        "EVC_DATASET":  "raw_custom_apis",
+    }
+    for ds, default in dataset_defaults.items():
+        bq.ensure_dataset(os.environ.get(ds, default))
     run_transforms(bq, stages=["seeds", "ddl"])
 
 

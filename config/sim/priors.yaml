@@ -1,0 +1,132 @@
+# Per-channel response-function priors. Values chosen to sit in the middle of
+# published CPG / retail-media ROAS bands for SEA:
+#   - Shopee Product Search: 3-8x
+#   - Shopee Shop Search / Targeting / GMV Max: 2-6x
+#   - TikTok Ads (app feed): 1.5-4x
+#   - Meta CPAS (catalog sales): 4-12x
+#   - Google Ads Search for Shopee: 2.5-7x
+#
+# adstock_halflife_days — geometric decay of residual response day-over-day
+# hill_shape            — curvature (1 = near-linear, 2+ = sharper knee)
+# cpm_sgd / ctr / cvr   — funnel priors used to back out impressions/clicks/orders
+# voucher_subsidy_pct   — Shopee-only; fraction of gross spend funded by vouchers
+# evc_coverage_pct      — view-assisted fraction of all_conversions; null = n/a
+# daily_spend_sgd_baseline — start-of-horizon daily spend (engine modulates it)
+# noise_coef            — log-normal sigma on values + neg-binom dispersion on counts
+
+channels:
+  shopee_ads_product_search:
+    adstock_halflife_days: 3.0
+    hill_shape:            1.8
+    baseline_roas:         5.5
+    roas_band:             [3.0, 8.0]
+    cpm_sgd:               2.0
+    ctr:                   0.025
+    cvr:                   0.080
+    voucher_subsidy_pct:   0.15
+    evc_coverage_pct:      null
+    daily_spend_sgd_baseline: 225.0
+    noise_coef:            0.12
+
+  shopee_ads_shop_search:
+    adstock_halflife_days: 2.5
+    hill_shape:            1.6
+    baseline_roas:         4.0
+    roas_band:             [2.0, 6.0]
+    cpm_sgd:               1.8
+    ctr:                   0.022
+    cvr:                   0.060
+    voucher_subsidy_pct:   0.12
+    evc_coverage_pct:      null
+    daily_spend_sgd_baseline: 90.0
+    noise_coef:            0.15
+
+  shopee_ads_targeting:
+    adstock_halflife_days: 4.0
+    hill_shape:            1.9
+    baseline_roas:         3.5
+    roas_band:             [2.0, 6.0]
+    cpm_sgd:               2.4
+    ctr:                   0.015
+    cvr:                   0.045
+    voucher_subsidy_pct:   0.18
+    evc_coverage_pct:      null
+    daily_spend_sgd_baseline: 150.0
+    noise_coef:            0.15
+
+  shopee_ads_gmv_max:
+    adstock_halflife_days: 4.5
+    hill_shape:            2.1
+    baseline_roas:         4.8
+    roas_band:             [2.5, 7.0]
+    cpm_sgd:               2.8
+    ctr:                   0.018
+    cvr:                   0.055
+    voucher_subsidy_pct:   0.20
+    evc_coverage_pct:      null
+    daily_spend_sgd_baseline: 275.0
+    noise_coef:            0.14
+
+  shopee_ads_affiliate:
+    adstock_halflife_days: 3.0
+    hill_shape:            1.5
+    baseline_roas:         5.0
+    roas_band:             [2.5, 7.0]
+    cpm_sgd:               1.2
+    ctr:                   0.030
+    cvr:                   0.070
+    voucher_subsidy_pct:   0.25
+    evc_coverage_pct:      null
+    daily_spend_sgd_baseline: 60.0
+    noise_coef:            0.18
+
+  tiktok_ads:
+    adstock_halflife_days: 5.0
+    hill_shape:            2.0
+    baseline_roas:         2.2
+    roas_band:             [1.5, 4.0]
+    cpm_sgd:               3.5
+    ctr:                   0.012
+    cvr:                   0.040
+    voucher_subsidy_pct:   0.0
+    evc_coverage_pct:      0.25   # EVTA share
+    daily_spend_sgd_baseline: 200.0
+    noise_coef:            0.18
+
+  meta_cpas:
+    adstock_halflife_days: 7.0
+    hill_shape:            2.0
+    baseline_roas:         6.0
+    roas_band:             [4.0, 12.0]
+    cpm_sgd:               4.0
+    ctr:                   0.015
+    cvr:                   0.060
+    voucher_subsidy_pct:   0.0
+    evc_coverage_pct:      0.20   # 1d_ev (post-Jan-2026)
+    daily_spend_sgd_baseline: 500.0
+    noise_coef:            0.15
+
+  google_ads_shopee:
+    adstock_halflife_days: 4.0
+    hill_shape:            1.7
+    baseline_roas:         6.5
+    roas_band:             [2.5, 7.0]
+    cpm_sgd:               3.0
+    ctr:                   0.035
+    cvr:                   0.050
+    voucher_subsidy_pct:   0.0
+    evc_coverage_pct:      0.18   # engaged_view share across Demand Gen / Video
+    daily_spend_sgd_baseline: 1200.0
+    noise_coef:            0.14
+
+# Organic / non-ads baseline demand on each anchor platform.
+# Sized for a demo-scale generator (produces ~200-400k raw order rows across
+# 180d × 6 markets — enough to show seasonality + channel mix without loading
+# tens of millions of rows to BigQuery).
+organic:
+  shopee:
+    baseline_daily_gmv_sgd: 18000.0
+    noise_coef: 0.20
+  tiktok_shop:
+    baseline_daily_gmv_sgd: 3500.0
+    noise_coef: 0.25

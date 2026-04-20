@@ -1,0 +1,73 @@
+# Elysium Home Care — fictional SEA CPG archetype (Unilever-style, home care +
+# personal care heavy). 4 categories × 8 SKUs = 32 SKUs. Prices in SGD; per-market
+# multipliers applied on top of FX to reflect local shelf pricing realities.
+
+brand:
+  name: "Elysium Home Care"
+  archetype: "home_care_personal_care"
+  markets: [ID, TH, VN, MY, SG, PH]
+
+  categories:
+    # -------------------------------------------------------------------------
+    # LAUNDRY — ~30% of brand GMV
+    # -------------------------------------------------------------------------
+    - id: laundry
+      name: Laundry
+      base_demand_share: 0.30
+      skus:
+        - { sku_id: ELY-LAU-0001, name: "Elysium Detergent Powder 800g",    category: laundry, unit_price_sgd: 6.50,  margin_pct: 0.35, lifecycle: mature }
+        - { sku_id: ELY-LAU-0002, name: "Elysium Detergent Powder 2.5kg",   category: laundry, unit_price_sgd: 14.90, margin_pct: 0.40, lifecycle: mature }
+        - { sku_id: ELY-LAU-0003, name: "Elysium Detergent Liquid 1L",      category: laundry, unit_price_sgd: 8.90,  margin_pct: 0.38, lifecycle: mature }
+        - { sku_id: ELY-LAU-0004, name: "Elysium Detergent Liquid 3L",      category: laundry, unit_price_sgd: 19.90, margin_pct: 0.42, lifecycle: mature }
+        - { sku_id: ELY-LAU-0005, name: "Elysium Fabric Softener Lavender", category: laundry, unit_price_sgd: 7.50,  margin_pct: 0.40, lifecycle: mature }
+        - { sku_id: ELY-LAU-0006, name: "Elysium Fabric Softener Fresh",    category: laundry, unit_price_sgd: 7.50,  margin_pct: 0.40, lifecycle: growth }
+        - { sku_id: ELY-LAU-0007, name: "Elysium Color Care Liquid",        category: laundry, unit_price_sgd: 9.90,  margin_pct: 0.38, lifecycle: growth }
+        - { sku_id: ELY-LAU-0008, name: "Elysium Stain Remover Spray",      category: laundry, unit_price_sgd: 5.90,  margin_pct: 0.45, lifecycle: launch, launch_day_offset: -30 }
+
+    # -------------------------------------------------------------------------
+    # PERSONAL CARE — ~30% of brand GMV
+    # -------------------------------------------------------------------------
+    - id: personal_care
+      name: Personal Care
+      base_demand_share: 0.30
+      skus:
+        - { sku_id: ELY-PER-0001, name: "Elysium Shampoo Daily Care 340ml", category: personal_care, unit_price_sgd: 6.90,  margin_pct: 0.45, lifecycle: mature }
+        - { sku_id: ELY-PER-0002, name: "Elysium Shampoo Anti-Dandruff",    category: personal_care, unit_price_sgd: 7.90,  margin_pct: 0.45, lifecycle: mature }
+        - { sku_id: ELY-PER-0003, name: "Elysium Conditioner Smooth",       category: personal_care, unit_price_sgd: 6.90,  margin_pct: 0.45, lifecycle: mature }
+        - { sku_id: ELY-PER-0004, name: "Elysium Body Wash Cool Mint 500ml", category: personal_care, unit_price_sgd: 5.90,  margin_pct: 0.42, lifecycle: mature }
+        - { sku_id: ELY-PER-0005, name: "Elysium Bar Soap Moisture 4x90g",  category: personal_care, unit_price_sgd: 3.90,  margin_pct: 0.35, lifecycle: mature }
+        - { sku_id: ELY-PER-0006, name: "Elysium Deodorant Roll-On",        category: personal_care, unit_price_sgd: 4.50,  margin_pct: 0.48, lifecycle: growth }
+        - { sku_id: ELY-PER-0007, name: "Elysium Toothpaste Whitening",     category: personal_care, unit_price_sgd: 4.90,  margin_pct: 0.50, lifecycle: mature }
+        - { sku_id: ELY-PER-0008, name: "Elysium Mouthwash 500ml",          category: personal_care, unit_price_sgd: 6.90,  margin_pct: 0.45, lifecycle: growth }
+
+    # -------------------------------------------------------------------------
+    # HOME CARE — ~22% of brand GMV
+    # -------------------------------------------------------------------------
+    - id: home_care
+      name: Home Care
+      base_demand_share: 0.22
+      skus:
+        - { sku_id: ELY-HOM-0001, name: "Elysium Floor Cleaner Pine",       category: home_care, unit_price_sgd: 4.90,  margin_pct: 0.38, lifecycle: mature }
+        - { sku_id: ELY-HOM-0002, name: "Elysium Surface Spray Antibac",    category: home_care, unit_price_sgd: 5.50,  margin_pct: 0.45, lifecycle: mature }
+        - { sku_id: ELY-HOM-0003, name: "Elysium Dishwash Liquid Lemon 900ml", category: home_care, unit_price_sgd: 4.50,  margin_pct: 0.38, lifecycle: mature }
+        - { sku_id: ELY-HOM-0004, name: "Elysium Dishwash Powder 1kg",      category: home_care, unit_price_sgd: 6.90,  margin_pct: 0.40, lifecycle: growth }
+        - { sku_id: ELY-HOM-0005, name: "Elysium Toilet Cleaner Gel",       category: home_care, unit_price_sgd: 4.90,  margin_pct: 0.42, lifecycle: mature }
+        - { sku_id: ELY-HOM-0006, name: "Elysium Glass Cleaner Spray",      category: home_care, unit_price_sgd: 3.90,  margin_pct: 0.40, lifecycle: mature }
+        - { sku_id: ELY-HOM-0007, name: "Elysium Air Freshener Citrus",     category: home_care, unit_price_sgd: 5.50,  margin_pct: 0.45, lifecycle: growth }
+        - { sku_id: ELY-HOM-0008, name: "Elysium Bleach 1L",                category: home_care, unit_price_sgd: 3.50,  margin_pct: 0.30, lifecycle: mature }
+
+    # -------------------------------------------------------------------------
+    # BEAUTY — ~18% of brand GMV (premium AOV skew)
+    # -------------------------------------------------------------------------
+    - id: beauty
+      name: Beauty
+      base_demand_share: 0.18
+      skus:
+        - { sku_id: ELY-BEA-0001, name: "Elysium Face Wash Gentle",         category: beauty, unit_price_sgd: 8.90,  margin_pct: 0.55, lifecycle: mature }
+        - { sku_id: ELY-BEA-0002, name: "Elysium Moisturizer Day SPF30",    category: beauty, unit_price_sgd: 16.90, margin_pct: 0.55, lifecycle: growth }
+        - { sku_id: ELY-BEA-0003, name: "Elysium Moisturizer Night",        category: beauty, unit_price_sgd: 18.90, margin_pct: 0.55, lifecycle: growth }
+        - { sku_id: ELY-BEA-0004, name: "Elysium Vitamin C Serum 30ml",     category: beauty, unit_price_sgd: 28.90, margin_pct: 0.60, lifecycle: launch, launch_day_offset: -60 }
+        - { sku_id: ELY-BEA-0005, name: "Elysium Sunscreen SPF50 100ml",    category: beauty, unit_price_sgd: 14.90, margin_pct: 0.50, lifecycle: growth }
+        - { sku_id: ELY-BEA-0006, name: "Elysium Lip Balm Cocoa",           category: beauty, unit_price_sgd: 4.90,  margin_pct: 0.55, lifecycle: mature }
+        - { sku_id: ELY-BEA-0007, name: "Elysium Lipstick Rose",            category: beauty, unit_price_sgd: 12.90, margin_pct: 0.55, lifecycle: mature }
+        - { sku_id: ELY-BEA-0008, name: "Elysium Foundation Liquid",        category: beauty, unit_price_sgd: 19.90, margin_pct: 0.55, lifecycle: mature }

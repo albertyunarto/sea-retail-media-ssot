@@ -22,9 +22,15 @@ dev = [
     "ruff>=0.6.0",
     "mypy>=1.11.0",
 ]
+sim = [
+    "numpy>=2.0.0",
+    "pandas>=2.2.0",
+    "scipy>=1.14.0",
+]
 
 [project.scripts]
 ssot = "ssot.main:cli"
+gen-data = "ssot.sim.cli:cli"
 
 [build-system]
 requires = ["hatchling"]
