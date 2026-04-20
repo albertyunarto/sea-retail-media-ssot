@@ -1,0 +1,117 @@
+/* Analytical Terminal — cool, analytical palette. No warm tones. */
+:root {
+  --paper: #f7f9fc;
+  --paper-2: #eef2f7;
+  --ink: #0b1220;
+  --ink-2: #334155;
+  --ink-3: #64748b;
+  --ink-4: #94a3b8;
+  --rule: #0b1220;
+  --rule-soft: #d6dde6;
+
+  --accent: #2563eb;
+  --accent-2: #3b82f6;
+  --gold: #0891b2;
+  --moss: #059669;
+  --indigo: #4f46e5;
+
+  --serif: "Inter Tight", ui-sans-serif, -apple-system, system-ui, sans-serif;
+  --sans: "Inter Tight", ui-sans-serif, -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--ink-4);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+button:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 1.5px solid var(--accent);
+  outline-offset: 2px;
+}
+
+select {
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  color: inherit;
+}
+
+/* Faint analytical grid — no noise, no warmth. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image:
+    linear-gradient(to right, rgba(11, 18, 32, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(11, 18, 32, 0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+#__next,
+main,
+body > * {
+  position: relative;
+  z-index: 3;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--paper);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.4);
+  }
+}
