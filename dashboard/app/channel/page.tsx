@@ -1,5 +1,6 @@
 import Masthead from "@/components/masthead";
-import { LensPlaceholder } from "@/components/lens/placeholder";
+import { ChannelBrief } from "@/components/channel-brief";
+import { getPanel } from "@/lib/panel-data";
 import type { Filters } from "@/lib/types";
 import { DEFAULT_FILTERS } from "@/lib/types";
 
@@ -15,15 +16,12 @@ export default async function ChannelPage({ searchParams }: PageProps) {
     evc: sp.evc === "true",
     lens: "editorial",
   };
+  const panel = await getPanel({ evc: filters.evc });
   return (
     <>
       <Masthead filters={filters} />
       <main>
-        <LensPlaceholder
-          title="Channel Brief — compact dropdown + market breakdown + heatmap"
-          kicker="Channel Deep-Dive"
-          note="Ships in Phase 2. The masthead, filter bar, and EVC toggle are wired; the deep-dive body (6-up KPI strip, time series, market breakdown, multi-channel comparison, market×day heatmap) will reuse the chart primitives already in place."
-        />
+        <ChannelBrief panel={panel} filters={filters} />
       </main>
     </>
   );
