@@ -83,40 +83,40 @@ channels:
   tiktok_ads:
     adstock_halflife_days: 5.0
     hill_shape:            2.0
-    baseline_roas:         2.5
+    baseline_roas:         2.2
     roas_band:             [1.5, 4.0]
     cpm_sgd:               3.5
     ctr:                   0.012
     cvr:                   0.040
     voucher_subsidy_pct:   0.0
     evc_coverage_pct:      0.25   # EVTA share
-    daily_spend_sgd_baseline: 450.0
+    daily_spend_sgd_baseline: 200.0
     noise_coef:            0.18
 
   meta_cpas:
     adstock_halflife_days: 7.0
     hill_shape:            2.0
-    baseline_roas:         7.0
+    baseline_roas:         6.0
     roas_band:             [4.0, 12.0]
     cpm_sgd:               4.0
     ctr:                   0.015
     cvr:                   0.060
     voucher_subsidy_pct:   0.0
     evc_coverage_pct:      0.20   # 1d_ev (post-Jan-2026)
-    daily_spend_sgd_baseline: 550.0
+    daily_spend_sgd_baseline: 500.0
     noise_coef:            0.15
 
   google_ads_shopee:
     adstock_halflife_days: 4.0
     hill_shape:            1.7
-    baseline_roas:         4.5
+    baseline_roas:         6.5
     roas_band:             [2.5, 7.0]
     cpm_sgd:               3.0
     ctr:                   0.035
     cvr:                   0.050
     voucher_subsidy_pct:   0.0
     evc_coverage_pct:      0.18   # engaged_view share across Demand Gen / Video
-    daily_spend_sgd_baseline: 400.0
+    daily_spend_sgd_baseline: 1200.0
     noise_coef:            0.14
 
 # Organic / non-ads baseline demand on each anchor platform.
@@ -125,7 +125,7 @@ channels:
 # tens of millions of rows to BigQuery).
 organic:
   shopee:
-    baseline_daily_gmv_sgd: 10000.0
+    baseline_daily_gmv_sgd: 18000.0
     noise_coef: 0.20
   tiktok_shop:
     baseline_daily_gmv_sgd: 3500.0
