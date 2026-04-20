@@ -115,3 +115,90 @@ body > * {
     transform: scale(1.4);
   }
 }
+
+/* ──────────────────────────────────────────────────────────────────
+ * Responsive utilities
+ *
+ * Designed to be dropped alongside inline `style={}` props — the
+ * `!important` on grid-template-columns beats the inline rule.
+ * Breakpoints:
+ *   mobile ≤ 480px    →  single-column stacking
+ *   tablet ≤ 768px    →  tighter multi-col stacks
+ * ────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .stack-mobile {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .cols-2-mobile {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .pad-responsive {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  .hide-mobile {
+    display: none !important;
+  }
+  .flex-wrap-mobile {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  .lever-row {
+    grid-template-columns: 1fr 1fr !important;
+    row-gap: 4px !important;
+  }
+  .lever-header {
+    display: none !important;
+  }
+  .kpi-strip-6 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  /* Decision card — remove per-column separators when stacked. */
+  .decision-card > * {
+    border-left: none !important;
+    border-right: none !important;
+    border-top: 1px solid var(--rule-soft) !important;
+  }
+  .decision-card > *:first-child {
+    border-top: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .stack-tablet {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .cols-3-tablet {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  .scroll-x-mobile {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .decision-card {
+    grid-template-columns: 1fr !important;
+  }
+  .kpi-strip-6 {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+/* Inner div sits inside a .scroll-x-mobile wrapper to lock a minimum
+ * chart / table width so columns don't compress to illegibility. */
+.min-w-chart {
+  min-width: 600px;
+}
+.min-w-table {
+  min-width: 640px;
+}
+
+/* Touch-friendly tap targets for the masthead filter bar on mobile. */
+@media (max-width: 480px) {
+  .tap-target {
+    min-height: 40px !important;
+  }
+}
+

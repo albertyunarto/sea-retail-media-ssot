@@ -24,9 +24,13 @@ export function PacingLens({
   );
 
   return (
-    <div style={{ background: C.paper, padding: "24px 32px 48px" }}>
+    <div
+      className="pad-responsive"
+      style={{ background: C.paper, padding: "24px 32px 48px" }}
+    >
       {/* Header */}
       <div
+        className="flex-wrap-mobile"
         style={{
           display: "flex",
           alignItems: "baseline",
@@ -59,6 +63,7 @@ export function PacingLens({
 
       {/* Pacing dials */}
       <div
+        className="cols-2-mobile"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(4, 1fr)",
@@ -149,12 +154,13 @@ function ChannelPacingTable({
 }) {
   return (
     <div
+      className="scroll-x-mobile"
       style={{
         border: `1px solid ${C.rule}`,
         background: C.paper,
-        overflow: "hidden",
       }}
     >
+    <div className="min-w-table">
       <div
         style={{
           display: "grid",
@@ -270,6 +276,7 @@ function ChannelPacingTable({
           </div>
         );
       })}
+    </div>
     </div>
   );
 }

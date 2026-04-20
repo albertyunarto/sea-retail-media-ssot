@@ -33,7 +33,9 @@ export function KPI({
         style={{
           fontFamily: FONT.serif,
           fontWeight: 500,
-          fontSize: large ? 56 : 36,
+          fontSize: large
+            ? "clamp(32px, 8vw, 56px)"
+            : "clamp(22px, 5vw, 36px)",
           lineHeight: 0.95,
           letterSpacing: "-0.02em",
           color: C.ink,
@@ -83,6 +85,7 @@ export function SectionHead({
 }) {
   return (
     <div
+      className="stack-mobile"
       style={{
         display: "grid",
         gridTemplateColumns: "1fr auto",
@@ -112,7 +115,7 @@ export function SectionHead({
         <div
           style={{
             fontFamily: FONT.serif,
-            fontSize: 22,
+            fontSize: "clamp(18px, 3.2vw, 22px)",
             fontWeight: 500,
             lineHeight: 1.05,
             letterSpacing: "-0.01em",

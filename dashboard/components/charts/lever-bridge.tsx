@@ -19,6 +19,7 @@ export function LeverBridge({ levers = [] }: { levers: Lever[] }) {
       }}
     >
       <div
+        className="lever-header"
         style={{
           display: "grid",
           gridTemplateColumns: "1.4fr 1fr 1fr 1.6fr 0.8fr",
@@ -45,6 +46,7 @@ export function LeverBridge({ levers = [] }: { levers: Lever[] }) {
         return (
           <div
             key={i}
+            className="lever-row"
             style={{
               display: "grid",
               gridTemplateColumns: "1.4fr 1fr 1fr 1.6fr 0.8fr",

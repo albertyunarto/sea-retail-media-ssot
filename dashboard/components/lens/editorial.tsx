@@ -83,6 +83,7 @@ export function EditorialLens({
     <div style={{ background: C.paper }}>
       {/* Lead story */}
       <section
+        className="stack-tablet pad-responsive"
         style={{
           padding: "32px 32px 24px",
           borderBottom: `2px double ${C.rule}`,
@@ -122,7 +123,7 @@ export function EditorialLens({
               margin: 0,
               fontFamily: FONT.serif,
               fontWeight: 500,
-              fontSize: 56,
+              fontSize: "clamp(32px, 6.5vw, 56px)",
               lineHeight: 0.96,
               letterSpacing: "-0.025em",
               textWrap: "balance" as "balance",
@@ -154,6 +155,7 @@ export function EditorialLens({
 
           {/* Three editorial beats */}
           <div
+            className="stack-mobile"
             style={{
               marginTop: 20,
               display: "grid",
@@ -284,6 +286,7 @@ export function EditorialLens({
 
       {/* Chart row */}
       <section
+        className="stack-tablet pad-responsive"
         style={{
           padding: "28px 32px",
           borderBottom: `1px solid ${C.rule}`,
@@ -409,13 +412,17 @@ export function EditorialLens({
       </section>
 
       {/* Markets */}
-      <section style={{ padding: "28px 32px", borderBottom: `1px solid ${C.rule}` }}>
+      <section
+        className="pad-responsive"
+        style={{ padding: "28px 32px", borderBottom: `1px solid ${C.rule}` }}
+      >
         <SectionHead
           kicker="Section C · By geography"
           title="Markets at a glance"
           byline={`${MARKETS.length} territories · sorted by GMV`}
         />
         <div
+          className="cols-2-mobile"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
@@ -486,14 +493,17 @@ export function EditorialLens({
                   accent={m.roas > 4 ? C.moss : m.roas > 2 ? C.ink : C.accent}
                 />
               </div>
-              <Sparkline values={m.trend} color={C.ink} width={280} height={28} fill />
+              <Sparkline values={m.trend} color={C.ink} width="100%" height={28} fill />
             </article>
           ))}
         </div>
       </section>
 
       {/* Channel ledger */}
-      <section style={{ padding: "28px 32px 48px" }}>
+      <section
+        className="pad-responsive"
+        style={{ padding: "28px 32px 48px" }}
+      >
         <SectionHead
           kicker="Section D · The ledger"
           title="Channel performance, ranked"
@@ -504,7 +514,9 @@ export function EditorialLens({
           </a>
         </SectionHead>
 
+        <div className="scroll-x-mobile">
         <table
+          className="min-w-table"
           style={{
             width: "100%",
             borderCollapse: "collapse",
@@ -523,6 +535,7 @@ export function EditorialLens({
                 (h, i) => (
                   <th
                     key={h}
+                    className={i === 2 || i === 3 ? "hide-mobile" : undefined}
                     style={{
                       textAlign: i >= 4 ? "right" : "left",
                       padding: "10px 12px",
@@ -607,6 +620,7 @@ export function EditorialLens({
                     </div>
                   </td>
                   <td
+                    className="hide-mobile"
                     style={{
                       padding: "12px",
                       color: C.ink2,
@@ -615,7 +629,7 @@ export function EditorialLens({
                   >
                     {r.platform}
                   </td>
-                  <td style={{ padding: "12px" }}>
+                  <td className="hide-mobile" style={{ padding: "12px" }}>
                     <Tag
                       tone={
                         r.group === "organic"
@@ -712,8 +726,10 @@ export function EditorialLens({
             })}
           </tbody>
         </table>
+        </div>
 
         <div
+          className="flex-wrap-mobile"
           style={{
             marginTop: 24,
             paddingTop: 12,
@@ -724,6 +740,7 @@ export function EditorialLens({
             letterSpacing: "0.04em",
             display: "flex",
             justifyContent: "space-between",
+            gap: 12,
           }}
         >
           <span>
