@@ -202,3 +202,62 @@ body > * {
   }
 }
 
+/* ──────────────────────────────────────────────────────────────────
+ * Masthead lens-strip and filter-bar — restructure on mobile/tablet
+ * instead of trying to flex-wrap (which produces the overlapping
+ * mess you see on a 375 px phone viewport).
+ * ────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  /* Lens tabs: 4 tabs laid out as a 2x2 grid with the label above. */
+  .lens-strip {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    height: auto !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .lens-strip > .lens-label {
+    grid-column: 1 / -1;
+    padding: 8px 16px !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .lens-strip > button {
+    min-height: 44px;
+    padding: 8px 12px !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+  }
+  .lens-strip > button:nth-child(odd):not(.lens-label) {
+    border-right: 1px solid var(--rule-soft);
+  }
+  .lens-strip > button:nth-child(-n + 3):not(.lens-label) {
+    border-bottom: 1px solid var(--rule-soft);
+  }
+
+  /* Filter bar: restructure to a 2-col grid and drop non-essential
+   * chrome (Currency is always USD; Export CSV + as_of are desktop-only). */
+  .filter-bar {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    padding: 0 !important;
+    min-height: auto !important;
+    flex-wrap: initial !important;
+  }
+  .filter-bar > label {
+    padding: 12px 16px !important;
+    border-bottom: 1px solid var(--rule-soft);
+    justify-content: space-between !important;
+  }
+  .filter-bar > label:nth-child(odd) {
+    border-right: 1px solid var(--rule-soft);
+  }
+  .hide-tablet {
+    display: none !important;
+  }
+  .filter-spacer {
+    display: none !important;
+  }
+}
+

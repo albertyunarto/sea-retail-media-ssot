@@ -195,7 +195,7 @@ export default function Masthead({ filters }: { filters: Filters }) {
       {/* Lens strip — only on overview */}
       {onOverview && (
         <div
-          className="pad-responsive scroll-x-mobile"
+          className="lens-strip pad-responsive"
           style={{
             display: "flex",
             alignItems: "stretch",
@@ -209,6 +209,7 @@ export default function Masthead({ filters }: { filters: Filters }) {
           }}
         >
           <span
+            className="lens-label"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -236,15 +237,13 @@ export default function Masthead({ filters }: { filters: Filters }) {
 
       {/* Filter bar */}
       <div
-        className="pad-responsive"
+        className="filter-bar pad-responsive"
         style={{
           display: "flex",
           alignItems: "center",
           gap: 0,
           padding: "0 32px",
-          minHeight: 36,
-          flexWrap: "wrap",
-          rowGap: 0,
+          height: 36,
           borderBottom: `1px solid ${C.rule}`,
           fontFamily: FONT.mono,
           fontSize: 11,
@@ -257,7 +256,7 @@ export default function Masthead({ filters }: { filters: Filters }) {
           options={RANGE_OPTIONS}
           onChange={(v) => updateParam({ range: v as Filters["range"] })}
         />
-        <Divider />
+        <Divider className="hide-tablet" />
         <FilterCell
           label="Market"
           value={filters.market}
@@ -267,22 +266,26 @@ export default function Masthead({ filters }: { filters: Filters }) {
           ]}
           onChange={(v) => updateParam({ market: v as Filters["market"] })}
         />
-        <Divider />
+        <Divider className="hide-tablet" />
         <FilterCell
+          className="hide-tablet"
           label="Currency"
           value="USD"
           options={[{ value: "USD", label: "USD" }]}
           onChange={() => {}}
         />
-        <Divider />
+        <Divider className="hide-tablet" />
         <EvcToggle
           evc={filters.evc}
           onChange={(v) => updateParam({ evc: v })}
         />
-        <div style={{ flex: 1 }} />
-        <span style={{ color: C.ink3, marginRight: 12 }}>as_of 2026-04-19</span>
+        <div className="filter-spacer" style={{ flex: 1 }} />
+        <span className="hide-tablet" style={{ color: C.ink3, marginRight: 12 }}>
+          as_of 2026-04-19
+        </span>
         <button
           type="button"
+          className="hide-tablet"
           style={{
             background: "transparent",
             border: `1px solid ${C.ink}`,
@@ -387,14 +390,17 @@ function FilterCell({
   value,
   options,
   onChange,
+  className,
 }: {
   label: string;
   value: string;
   options: { value: string; label: string }[];
   onChange: (v: string) => void;
+  className?: string;
 }) {
   return (
     <label
+      className={className}
       style={{
         display: "inline-flex",
         alignItems: "center",
@@ -446,8 +452,13 @@ function FilterCell({
   );
 }
 
-function Divider() {
-  return <div style={{ width: 1, height: 18, background: C.ruleSoft }} />;
+function Divider({ className }: { className?: string }) {
+  return (
+    <div
+      className={className}
+      style={{ width: 1, height: 18, background: C.ruleSoft }}
+    />
+  );
 }
 
 function EvcToggle({ evc, onChange }: { evc: boolean; onChange: (v: boolean) => void }) {
