@@ -5,6 +5,7 @@ import { ShareComparison, type ShareRow } from "@/components/charts/share-compar
 import { fmtDelta, fmtUSD } from "@/lib/format";
 import {
   applyEvc,
+  computeAnomaly,
   computeWeeklyStory,
   filterPanel,
 } from "@/lib/aggregations";
@@ -107,12 +108,20 @@ export function DailyReport({
     .filter((r) => r.spendShare > 0.005 || r.gmvShare > 0.005);
 
   // ── §4.3 data: attribution-noted ROAS table ────────────────────
+  const story = computeWeeklyStory(evcPanel, filters.market);
+  const channelDeltaById = new Map(
+    (story?.channelDeltas ?? []).map((c) => [c.id, c] as const),
+  );
   const roasRows = paidChannels.map((c) => {
     const chRows = filtered.filter((r) => r.channel === c.id);
     const spend = chRows.reduce((a, r) => a + r.spend_usd, 0);
     const direct = chRows.reduce((a, r) => a + (r.direct_gmv_usd ?? 0), 0);
     const broad = chRows.reduce((a, r) => a + (r.broad_gmv_usd ?? 0), 0);
     const ads = chRows.reduce((a, r) => a + (r.ads_gmv_usd ?? 0), 0);
+    const d = channelDeltaById.get(c.id);
+    const anomaly = d
+      ? computeAnomaly(d)
+      : { level: "healthy" as const, label: "—" };
     return {
       id: c.id,
       label: c.label,
@@ -121,10 +130,9 @@ export function DailyReport({
       direct_roas: spend > 0 ? direct / spend : 0,
       broad_roas: spend > 0 ? broad / spend : 0,
       ads_roas: spend > 0 ? ads / spend : 0,
+      anomaly,
     };
   });
-
-  const story = computeWeeklyStory(evcPanel, filters.market);
 
   return (
     <div style={{ background: C.paper }}>
@@ -275,6 +283,7 @@ export function DailyReport({
                   { h: "Spend", r: true },
                   { h: "Direct ROAS", r: true },
                   { h: "Broad ROAS", r: true },
+                  { h: "Signal", r: false },
                 ].map((c) => (
                   <th
                     key={c.h}
@@ -380,6 +389,53 @@ export function DailyReport({
                       }}
                     >
                       {r.broad_roas > 0 ? r.broad_roas.toFixed(2) + "×" : "—"}
+                    </td>
+                    <td style={{ padding: "10px 12px" }}>
+                      {(() => {
+                        const lvl = r.anomaly.level;
+                        const color =
+                          lvl === "data_issue"
+                            ? C.gold
+                            : lvl === "spike"
+                              ? C.gold
+                              : lvl === "slump"
+                                ? C.accent
+                                : C.moss;
+                        const text =
+                          lvl === "data_issue"
+                            ? "⚠ VERIFY"
+                            : lvl === "healthy"
+                              ? "OK"
+                              : lvl.toUpperCase();
+                        return (
+                          <span
+                            title={r.anomaly.detail ?? r.anomaly.label}
+                            style={{
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: 6,
+                              fontFamily: FONT.mono,
+                              fontSize: 10,
+                              color,
+                              fontWeight: 700,
+                              letterSpacing: "0.04em",
+                              textTransform: "uppercase",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            <span
+                              style={{
+                                width: 8,
+                                height: 8,
+                                borderRadius: lvl === "data_issue" ? 0 : "50%",
+                                background: color,
+                                flexShrink: 0,
+                              }}
+                            />
+                            {text}
+                          </span>
+                        );
+                      })()}
                     </td>
                   </tr>
                 );

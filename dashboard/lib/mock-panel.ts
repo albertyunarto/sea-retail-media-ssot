@@ -103,7 +103,15 @@ export function getMockPanel(): PanelRow[] {
           c.group === "organic" ? 0 : Math.round(impressions * (0.012 + r() * 0.015));
         const targetRoas = CH_ROAS[c.id] ?? 0.95;
         const roasNoise = 0.92 + r() * 0.16;
-        const adsGmv = c.group === "organic" ? 0 : spend * targetRoas * roasNoise;
+        // Seeded demonstration of the `data_issue` anomaly for the daily
+        // report §4.3: TikTok Ads has a 40% ROAS drop in the most recent
+        // week. Surfaces the "verify tag / ingest window" guard-rail from
+        // the measurement-framework charter. Fine to remove once real
+        // ingest shape naturally generates >25% WoW swings.
+        const recentWeek = d < 7;
+        const dataIssueDemo = recentWeek && c.id === "tiktok_ads" ? 0.6 : 1.0;
+        const adsGmv =
+          c.group === "organic" ? 0 : spend * targetRoas * roasNoise * dataIssueDemo;
         const adsOrders = c.group === "organic" ? 0 : Math.max(1, Math.round(adsGmv / (14 + r() * 10)));
         const evcCoverage = CH_EVC[c.id];
         const evcConversions =
