@@ -31,3 +31,7 @@ out/
 next-env.d.ts
 .env.local
 .env*.local
+
+# Generated from data/sim-csv/ at build time by scripts/copy-sim-csv.mjs;
+# canonical copies live in data/sim-csv/.
+dashboard/public/sim-csv/
