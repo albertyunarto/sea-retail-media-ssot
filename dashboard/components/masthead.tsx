@@ -8,10 +8,10 @@ import type { Filters } from "@/lib/types";
 import { DEFAULT_FILTERS } from "@/lib/types";
 
 const LENSES: { id: Filters["lens"]; label: string; sub: string }[] = [
-  { id: "editorial", label: "Editorial", sub: "narrative + WoW" },
   { id: "decisions", label: "Decisions", sub: "3 ranked moves" },
+  { id: "narrative", label: "Narrative", sub: "weekly WoW story" },
   { id: "decomposition", label: "Decomposition", sub: "levers + waterfall" },
-  { id: "pacing", label: "Pacing", sub: "MTD vs plan" },
+  { id: "channel", label: "Channel", sub: "per-channel drill-down" },
 ];
 
 const RANGE_OPTIONS: { value: Filters["range"]; label: string }[] = [
@@ -25,14 +25,17 @@ export default function Masthead({ filters }: { filters: Filters }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const onOverview = pathname === "/";
+  const onAdvanced = pathname.startsWith("/advanced");
 
   const updateParam = useCallback(
     (patch: Partial<Filters>) => {
       const sp = new URLSearchParams(searchParams.toString());
       for (const [k, v] of Object.entries(patch)) {
-        if (v === DEFAULT_FILTERS[k as keyof Filters] || v === false) sp.delete(k);
-        else sp.set(k, String(v));
+        // Lens is stored under the `tab` URL param on /advanced for clarity
+        // ("lens" is leftover internal terminology); translate on the way out.
+        const key = k === "lens" ? "tab" : k;
+        if (v === DEFAULT_FILTERS[k as keyof Filters] || v === false) sp.delete(key);
+        else sp.set(key, String(v));
       }
       const qs = sp.toString();
       router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
@@ -185,15 +188,15 @@ export default function Masthead({ filters }: { filters: Filters }) {
             href={withQs("/", searchParams.toString())}
           />
           <NavTab
-            label="Channel"
-            active={pathname.startsWith("/channel")}
-            href={withQs("/channel", searchParams.toString())}
+            label="Advanced"
+            active={onAdvanced}
+            href={withQs("/advanced", searchParams.toString())}
           />
         </div>
       </div>
 
-      {/* Lens strip — only on overview */}
-      {onOverview && (
+      {/* Tab strip — only on /advanced */}
+      {onAdvanced && (
         <div
           className="lens-strip pad-responsive"
           style={{
@@ -221,7 +224,7 @@ export default function Masthead({ filters }: { filters: Filters }) {
               borderRight: `1px solid ${C.ruleSoft}`,
             }}
           >
-            Lens
+            View
           </span>
           {LENSES.map((v) => (
             <LensTab

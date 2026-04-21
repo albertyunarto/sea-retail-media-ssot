@@ -58,12 +58,13 @@ export interface Filters {
   range: "7" | "14" | "30" | "mtd";
   market: Market | "all";
   evc: boolean;
-  lens: "editorial" | "decisions" | "decomposition" | "pacing";
+  /** Controls which tab renders on /advanced. Unused on `/` (main page). */
+  lens: "decisions" | "narrative" | "decomposition" | "channel";
 }
 
 export const DEFAULT_FILTERS: Filters = {
   range: "14",
   market: "all",
   evc: false,
-  lens: "editorial",
+  lens: "decisions",
 };
