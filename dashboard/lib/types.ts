@@ -35,6 +35,16 @@ export interface PanelRow {
   platform_total_orders: number;
   is_weekend: boolean;
   is_payday: boolean;
+  /** Mega-sale day per the calendar-events seed (11.11, 12.12, Harbolnas,
+   *  Lebaran, Songkran, CNY, Tet, etc.). Joined from
+   *  `seeds.seed_calendar_events` during the mart build. */
+  is_mega_sale?: boolean;
+  /** Shopee: direct = last-click within the platform, broad = direct +
+   *  view-assisted. Non-Shopee (TikTok Ads / Meta CPAS / Google Ads):
+   *  both columns duplicate `ads_gmv_usd` (the single reported figure)
+   *  so the frontend never branches on platform. Organic: NULL. */
+  direct_gmv_usd?: number;
+  broad_gmv_usd?: number;
   /** EVC extension — 0 on non-EVC channels or when EVC is off. */
   evc_conversions?: number;
   evc_gmv_usd?: number;

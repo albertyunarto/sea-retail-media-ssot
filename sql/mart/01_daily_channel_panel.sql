@@ -46,7 +46,9 @@ on_platform AS (
     SUM(impressions)                                      AS impressions,
     SUM(clicks)                                           AS clicks,
     SUM(COALESCE(broad_orders, direct_orders))            AS ads_attributed_orders,
-    SUM(COALESCE(broad_gmv_usd, direct_gmv_usd))          AS ads_attributed_gmv_usd
+    SUM(COALESCE(broad_gmv_usd, direct_gmv_usd))          AS ads_attributed_gmv_usd,
+    SUM(direct_gmv_usd)                                   AS direct_gmv_usd,
+    SUM(broad_gmv_usd)                                    AS broad_gmv_usd
   FROM `${GCP_PROJECT}.${FACT_DATASET}.fact_onplatform_ads`
   GROUP BY 1,2,3,4
 ),
@@ -61,7 +63,12 @@ off_platform AS (
     SUM(impressions)                        AS impressions,
     SUM(clicks)                             AS clicks,
     SUM(purchases_reported)                 AS ads_attributed_orders,
-    SUM(purchase_value_reported_usd)        AS ads_attributed_gmv_usd
+    SUM(purchase_value_reported_usd)        AS ads_attributed_gmv_usd,
+    -- Off-platform platforms (Meta CPAS, Google Ads) don't split direct vs
+    -- broad; duplicate the single reported value so the frontend never
+    -- branches on platform.
+    SUM(purchase_value_reported_usd)        AS direct_gmv_usd,
+    SUM(purchase_value_reported_usd)        AS broad_gmv_usd
   FROM `${GCP_PROJECT}.${FACT_DATASET}.fact_offplatform_ads`
   GROUP BY 1,2,3,4
 ),
@@ -80,21 +87,26 @@ organic AS (
     CAST(NULL AS INT64) AS impressions,
     CAST(NULL AS INT64) AS clicks,
     CAST(NULL AS INT64) AS ads_attributed_orders,
-    CAST(NULL AS NUMERIC) AS ads_attributed_gmv_usd
+    CAST(NULL AS NUMERIC) AS ads_attributed_gmv_usd,
+    CAST(NULL AS NUMERIC) AS direct_gmv_usd,
+    CAST(NULL AS NUMERIC) AS broad_gmv_usd
   FROM `${GCP_PROJECT}.${FACT_DATASET}.fact_platform_sales` fps
   GROUP BY 1,2,3,4
 ),
 unioned AS (
   SELECT channel, date_local, market, anchor_platform,
-         spend_usd, impressions, clicks, ads_attributed_orders, ads_attributed_gmv_usd
+         spend_usd, impressions, clicks, ads_attributed_orders, ads_attributed_gmv_usd,
+         direct_gmv_usd, broad_gmv_usd
   FROM on_platform
   UNION ALL
   SELECT channel, date_local, market, anchor_platform,
-         spend_usd, impressions, clicks, ads_attributed_orders, ads_attributed_gmv_usd
+         spend_usd, impressions, clicks, ads_attributed_orders, ads_attributed_gmv_usd,
+         direct_gmv_usd, broad_gmv_usd
   FROM off_platform
   UNION ALL
   SELECT channel, date_local, market, anchor_platform,
-         spend_usd, impressions, clicks, ads_attributed_orders, ads_attributed_gmv_usd
+         spend_usd, impressions, clicks, ads_attributed_orders, ads_attributed_gmv_usd,
+         direct_gmv_usd, broad_gmv_usd
   FROM organic
 )
 SELECT
@@ -107,15 +119,25 @@ SELECT
   u.clicks,
   u.ads_attributed_orders,
   u.ads_attributed_gmv_usd,
+  u.direct_gmv_usd,
+  u.broad_gmv_usd,
   pt.platform_total_orders,
   pt.platform_total_gmv_usd,
   -- covariates
   EXTRACT(DAYOFWEEK FROM u.date_local) = 7 OR EXTRACT(DAYOFWEEK FROM u.date_local) = 1 AS is_weekend,
   EXTRACT(DAY FROM u.date_local) IN (1, 15, 16) AS is_payday,
+  ce.date IS NOT NULL                                           AS is_mega_sale,
   EXTRACT(WEEK(MONDAY) FROM u.date_local) AS week_of_year,
   CURRENT_TIMESTAMP() AS loaded_at
 FROM unioned u
 LEFT JOIN platform_totals pt
   ON pt.date_local = u.date_local
  AND pt.market     = u.market
- AND pt.platform   = u.anchor_platform;
+ AND pt.platform   = u.anchor_platform
+LEFT JOIN (
+  -- De-dup the seed: a single (date, market) can have multiple events (e.g.
+  -- 11.11 + Harbolnas on the same day in ID) but we only need the boolean.
+  SELECT DISTINCT date, market FROM `${GCP_PROJECT}.${SEED_DATASET}.seed_calendar_events`
+) ce
+  ON ce.date   = u.date_local
+ AND ce.market = u.market;

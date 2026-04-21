@@ -53,6 +53,20 @@ function seeded(seed: number) {
 
 let cache: PanelRow[] | null = null;
 
+/** Mirrors sql/seeds/05_seed_calendar_events.sql coverage, narrowed to the
+ *  30-day mock window (2026-03-21 → 2026-04-19): no 11.11 / 12.12 in range,
+ *  but 3.3, 4.4, Lebaran (ID+MY, Mar 20-22), Songkran (TH, Apr 13-15) are. */
+function isMegaSaleDay(iso: string, market: string): boolean {
+  const panSea = new Set(["2026-03-03", "2026-04-04"]);
+  if (panSea.has(iso)) return true;
+  // Lebaran ID + MY (3/20-3/22 covered by charter seasonality.yaml)
+  if ((market === "ID" || market === "MY") &&
+      iso >= "2026-03-20" && iso <= "2026-03-22") return true;
+  // Songkran TH
+  if (market === "TH" && iso >= "2026-04-13" && iso <= "2026-04-15") return true;
+  return false;
+}
+
 export function getMockPanel(): PanelRow[] {
   if (cache) return cache;
   const rows: PanelRow[] = [];
@@ -96,6 +110,26 @@ export function getMockPanel(): PanelRow[] {
           evcCoverage != null ? Math.round(adsOrders * (evcCoverage / (1 - evcCoverage))) : 0;
         const evcGmv = evcCoverage != null ? adsGmv * (evcCoverage / (1 - evcCoverage)) : 0;
 
+        // Direct vs broad split:
+        //   - Shopee ads sub-channels: direct = last-click, broad = direct + view-assisted.
+        //     Model as direct = 55% of broad, so broad - direct gives a meaningful view-assist
+        //     delta on the daily report.
+        //   - Non-Shopee (TikTok Ads / Meta CPAS / Google Ads): duplicate direct = broad = adsGmv
+        //     per charter decision (frontend doesn't branch on platform).
+        //   - Organic: both undefined (NULL).
+        let directGmv: number | undefined;
+        let broadGmv: number | undefined;
+        if (c.group === "organic") {
+          directGmv = undefined;
+          broadGmv = undefined;
+        } else if (c.id.startsWith("shopee_ads_")) {
+          broadGmv = adsGmv;
+          directGmv = adsGmv * 0.55;
+        } else {
+          directGmv = adsGmv;
+          broadGmv = adsGmv;
+        }
+
         rows.push({
           date: iso,
           market: m.code as Market,
@@ -108,10 +142,13 @@ export function getMockPanel(): PanelRow[] {
           clicks,
           ads_orders: adsOrders,
           ads_gmv_usd: adsGmv,
+          direct_gmv_usd: directGmv,
+          broad_gmv_usd: broadGmv,
           platform_total_gmv_usd: platformGmv,
           platform_total_orders: platformOrders,
           is_weekend: isWeekend,
           is_payday: isPayday,
+          is_mega_sale: isMegaSaleDay(iso, m.code),
           evc_conversions: evcConversions,
           evc_gmv_usd: evcGmv,
         });
