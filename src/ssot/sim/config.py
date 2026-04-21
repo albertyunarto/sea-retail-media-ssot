@@ -183,7 +183,7 @@ class ScenariosFile(BaseModel):
 # ---------------------------------------------------------------------------
 # Unified run config
 # ---------------------------------------------------------------------------
-OutputMode = Literal["supermetrics", "bq", "both"]
+OutputMode = Literal["supermetrics", "bq", "both", "csv"]
 
 
 class SimConfig(BaseModel):

@@ -78,7 +78,14 @@ def init(brand_name: str, force: bool) -> None:
 # run (stub — wired in Phase 3)
 # ---------------------------------------------------------------------------
 @cli.command()
-@click.option("--mode", type=click.Choice(["supermetrics", "bq", "both"]), default="bq")
+@click.option(
+    "--mode",
+    type=click.Choice(["supermetrics", "bq", "both", "csv"]),
+    default="bq",
+    help="Output shape: supermetrics (NDJSON per day/market) · bq (direct to "
+    "BigQuery) · both · csv (one flat CSV per connector, ready for "
+    "Sheets / Drive / Supermetrics CSV import).",
+)
 @click.option("--seed", type=int, default=42)
 @click.option("--days", type=int, default=180)
 @click.option("--as-of", default=None, help="YYYY-MM-DD. End date of sim horizon. Defaults to today.")

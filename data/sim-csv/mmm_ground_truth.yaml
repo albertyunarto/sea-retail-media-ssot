@@ -1,0 +1,52 @@
+generated_by: ssot.sim
+note: These are the TRUE values used by the engine. Any MMM tool applied to the generated
+  data should recover values close to these (within noise).
+channels:
+  shopee_ads_product_search:
+    adstock_halflife_days: 3.0
+    hill_shape: 1.8
+    baseline_roas: 5.5
+    daily_spend_sgd_baseline: 225.0
+    evc_coverage_pct: null
+  shopee_ads_shop_search:
+    adstock_halflife_days: 2.5
+    hill_shape: 1.6
+    baseline_roas: 4.0
+    daily_spend_sgd_baseline: 90.0
+    evc_coverage_pct: null
+  shopee_ads_targeting:
+    adstock_halflife_days: 4.0
+    hill_shape: 1.9
+    baseline_roas: 3.5
+    daily_spend_sgd_baseline: 150.0
+    evc_coverage_pct: null
+  shopee_ads_gmv_max:
+    adstock_halflife_days: 4.5
+    hill_shape: 2.1
+    baseline_roas: 4.8
+    daily_spend_sgd_baseline: 275.0
+    evc_coverage_pct: null
+  shopee_ads_affiliate:
+    adstock_halflife_days: 3.0
+    hill_shape: 1.5
+    baseline_roas: 5.0
+    daily_spend_sgd_baseline: 60.0
+    evc_coverage_pct: null
+  tiktok_ads:
+    adstock_halflife_days: 5.0
+    hill_shape: 2.0
+    baseline_roas: 2.2
+    daily_spend_sgd_baseline: 200.0
+    evc_coverage_pct: 0.25
+  meta_cpas:
+    adstock_halflife_days: 7.0
+    hill_shape: 2.0
+    baseline_roas: 6.0
+    daily_spend_sgd_baseline: 500.0
+    evc_coverage_pct: 0.2
+  google_ads_shopee:
+    adstock_halflife_days: 4.0
+    hill_shape: 1.7
+    baseline_roas: 6.5
+    daily_spend_sgd_baseline: 1200.0
+    evc_coverage_pct: 0.18

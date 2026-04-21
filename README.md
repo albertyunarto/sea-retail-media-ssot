@@ -157,6 +157,17 @@ Outputs:
 
 Full docs: [`docs/simulation.md`](docs/simulation.md).
 
+### No BigQuery? Pull the CSVs straight into Supermetrics / Sheets
+
+A committed 7-day reference sample lives at
+[`data/sim-csv/`](data/sim-csv/) — one flat CSV per connector, fields
+matching the native Supermetrics schema. Drop them into a Google
+Sheet (`=IMPORTDATA(raw-url)`), point Supermetrics' CSV or Sheets
+connector at them, and you have a data source for the dashboard
+without ever touching BQ. Regenerate a longer window locally with
+`gen-data run --mode=csv --days=30 --output=./my-sim-csv`. See the
+folder's [README](data/sim-csv/README.md) for the full import flow.
+
 ## Measurement framework
 
 `mart.daily_channel_panel` is the sole consumer-facing table. It's built to feed four named consumers: daily spend + conversion visibility, multivariate regression, causal-impact studies (geo holdouts, on/off switches, seasonal lift), and a light MMM over 12–18 months of history with adstock + Hill saturation priors.
