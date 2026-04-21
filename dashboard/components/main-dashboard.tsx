@@ -271,11 +271,20 @@ export function MainDashboard({
                 const d = channelDeltaById.get(r.id);
                 const anomaly = d ? computeAnomaly(d) : { level: "healthy" as const, label: "—" };
                 const anomalyColor =
-                  anomaly.level === "spike"
+                  anomaly.level === "data_issue"
                     ? C.gold
-                    : anomaly.level === "slump"
-                      ? C.accent
-                      : C.moss;
+                    : anomaly.level === "spike"
+                      ? C.gold
+                      : anomaly.level === "slump"
+                        ? C.accent
+                        : C.moss;
+                const anomalyIcon = anomaly.level === "data_issue" ? "⚠ " : "";
+                const anomalyText =
+                  anomaly.level === "data_issue"
+                    ? "VERIFY"
+                    : anomaly.level === "healthy"
+                      ? "OK"
+                      : anomaly.level.toUpperCase();
                 const roasColor = roas > 1.4 ? C.moss : roas > 1.0 ? C.ink : C.accent;
                 return (
                   <tr
@@ -373,7 +382,7 @@ export function MainDashboard({
                     </td>
                     <td style={{ padding: "12px" }}>
                       <span
-                        title={anomaly.label}
+                        title={anomaly.detail ?? anomaly.label}
                         style={{
                           display: "inline-flex",
                           alignItems: "center",
@@ -391,12 +400,13 @@ export function MainDashboard({
                           style={{
                             width: 8,
                             height: 8,
-                            borderRadius: "50%",
+                            borderRadius: anomaly.level === "data_issue" ? 0 : "50%",
                             background: anomalyColor,
                             flexShrink: 0,
                           }}
                         />
-                        {anomaly.level === "healthy" ? "OK" : anomaly.level.toUpperCase()}
+                        {anomalyIcon}
+                        {anomalyText}
                       </span>
                     </td>
                   </tr>

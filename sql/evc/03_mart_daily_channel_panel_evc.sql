@@ -36,6 +36,8 @@ SELECT
   p.clicks,
   p.ads_attributed_orders,
   p.ads_attributed_gmv_usd                              AS reported_gmv_usd,
+  p.direct_gmv_usd,
+  p.broad_gmv_usd,
   COALESCE(e.evc_value_usd, 0)                          AS evc_gmv_usd,
   p.ads_attributed_gmv_usd + COALESCE(e.evc_value_usd, 0) AS all_gmv_usd,
   COALESCE(e.reported_conversions, p.ads_attributed_orders) AS reported_conversions,
@@ -46,6 +48,7 @@ SELECT
   p.platform_total_gmv_usd,
   p.is_weekend,
   p.is_payday,
+  p.is_mega_sale,
   p.week_of_year,
   CURRENT_TIMESTAMP() AS loaded_at
 FROM `${GCP_PROJECT}.${MART_DATASET}.daily_channel_panel` p

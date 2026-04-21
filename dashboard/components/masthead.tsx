@@ -26,6 +26,7 @@ export default function Masthead({ filters }: { filters: Filters }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const onAdvanced = pathname.startsWith("/advanced");
+  const onDailyReport = pathname.startsWith("/daily-report");
 
   const updateParam = useCallback(
     (patch: Partial<Filters>) => {
@@ -186,6 +187,11 @@ export default function Masthead({ filters }: { filters: Filters }) {
             label="Overview"
             active={pathname === "/"}
             href={withQs("/", searchParams.toString())}
+          />
+          <NavTab
+            label="Daily Report"
+            active={onDailyReport}
+            href={withQs("/daily-report", searchParams.toString())}
           />
           <NavTab
             label="Advanced"

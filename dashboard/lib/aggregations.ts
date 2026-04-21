@@ -226,19 +226,35 @@ export function computeChannelTrend(
   });
 }
 
-/** Anomaly signal for the ranked channel table on the main page.
+/** Anomaly signal for the ranked channel table + daily-report ROAS table.
+ *  - 'data_issue' — |ROAS WoW| > 25% AND spend > $1k. Per Charter §4.3,
+ *    swings this large usually mean a tag fired differently or an ingest
+ *    window shifted — verify before re-allocating budget.
  *  - 'spike' — spend WoW > +25%
  *  - 'slump' — spend WoW < −20% OR ROAS shift < −15%
  *  - 'healthy' — inside normal band
- *  Returns a short human label alongside the level. */
-export type AnomalyLevel = "spike" | "slump" | "healthy";
+ *  `data_issue` takes precedence over spike / slump to ensure the warning
+ *  surfaces rather than hiding behind a less actionable signal. */
+export type AnomalyLevel = "data_issue" | "spike" | "slump" | "healthy";
 export interface Anomaly {
   level: AnomalyLevel;
   label: string;
+  /** Longer tooltip copy surfaced on hover. */
+  detail?: string;
 }
 export function computeAnomaly(c: ChannelDelta): Anomaly {
   const spend = c.spendDelta ?? 0;
   const roasShift = c.roasShiftPct ?? 0;
+  // Data-issue guard-rail — fires first. Spend floor keeps tiny-channel
+  // noise out; charter says the WoW threshold is 25%.
+  if (Math.abs(roasShift) > 0.25 && c.spendNow > 1000) {
+    return {
+      level: "data_issue",
+      label: `ROAS swung ${(roasShift * 100).toFixed(0)}%`,
+      detail:
+        "ROAS moved >25% WoW. Verify the tag / ingest window before re-allocating budget.",
+    };
+  }
   if (spend < -0.2) return { level: "slump", label: `Spend down ${(spend * 100).toFixed(0)}%` };
   if (roasShift < -0.15) return { level: "slump", label: `ROAS down ${(roasShift * 100).toFixed(0)}%` };
   if (spend > 0.25) return { level: "spike", label: `Spend up ${(spend * 100).toFixed(0)}%` };

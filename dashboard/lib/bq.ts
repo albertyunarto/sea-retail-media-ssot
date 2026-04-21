@@ -58,10 +58,13 @@ export async function queryPanelFromBQ(opts: {
       COALESCE(clicks, 0)                AS clicks,
       COALESCE(ads_attributed_orders, 0) AS ads_orders,
       COALESCE(ads_attributed_gmv_usd, 0) AS ads_gmv_usd,
+      direct_gmv_usd,
+      broad_gmv_usd,
       platform_total_gmv_usd,
       platform_total_orders,
       is_weekend,
-      is_payday
+      is_payday,
+      COALESCE(is_mega_sale, FALSE) AS is_mega_sale
       ${
         opts.evc
           ? `,
