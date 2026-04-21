@@ -5,6 +5,14 @@ Produces coherent, connector-accurate, EVC-aware marketing data for the
 fictional SEA CPG brand **Elysium Home Care** across 6 markets and 6 data
 sources (plus 3 EVC custom-API extensions). See PRD-A for the narrative.
 
+> **Feeds** the measurement framework charter at
+> [`docs/measurement_framework.md`](./measurement_framework.md) — same
+> scope (6 SEA markets, Shopee + TikTok Shop anchors), same modeling
+> goals (visibility, multivariate regression, causal impact, light MMM
+> with adstock + Hill saturation). The ground-truth priors emitted
+> alongside generated data (`mmm_ground_truth.yaml`) are the calibration
+> target demo-mode MMM runs are scored against.
+
 ## When to use it
 
 - You want to demo the full `sea-retail-media-ssot` stack end-to-end but have
