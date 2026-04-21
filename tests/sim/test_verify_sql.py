@@ -1,15 +1,23 @@
-"""Verify SQL files exist, cover the 10 documented invariants, and parse as SQL."""
+"""Verify SQL files exist, cover the documented invariants, and parse as SQL.
+
+Baseline invariants (10) come from PRD-A §10 Phase 5. Phase 1 of the
+measurement-framework roadmap added 2 more (`is_mega_sale` matches seed
++ direct ≤ broad), so the floor is now 12.
+"""
 
 from __future__ import annotations
 
 from pathlib import Path
 
 VERIFY_DIR = Path(__file__).resolve().parents[2] / "sql" / "verify"
+MIN_VERIFY_SQLS = 12
 
 
-def test_ten_verify_sql_files_exist():
+def test_verify_sql_floor():
     files = sorted(VERIFY_DIR.glob("*.sql"))
-    assert len(files) == 10, f"expected 10 verify SQLs, got {len(files)}: {[f.name for f in files]}"
+    assert len(files) >= MIN_VERIFY_SQLS, (
+        f"expected ≥{MIN_VERIFY_SQLS} verify SQLs, got {len(files)}: {[f.name for f in files]}"
+    )
 
 
 def test_every_verify_file_is_a_select_statement():

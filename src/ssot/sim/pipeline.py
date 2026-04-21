@@ -13,7 +13,7 @@ from .config import SimConfig
 from .engine import LatentState
 from .projections import REGISTRY
 from .rng import make_rng
-from .writers import BigQueryWriter, SupermetricsWriter
+from .writers import BigQueryWriter, CSVWriter, SupermetricsWriter
 
 log = get_logger(__name__)
 
@@ -64,6 +64,10 @@ def run_pipeline(cfg: SimConfig, latent: LatentState, *, dry_run: bool = False) 
         if cfg.output_dir is None:
             raise click.ClickException("--output required when mode includes 'supermetrics'")
         writers.append(("supermetrics", SupermetricsWriter(cfg.output_dir)))
+    if cfg.output_mode == "csv":
+        if cfg.output_dir is None:
+            raise click.ClickException("--output required when mode=csv")
+        writers.append(("csv", CSVWriter(cfg.output_dir)))
     if cfg.output_mode in ("bq", "both"):
         if not cfg.project:
             raise click.ClickException("--project (or GCP_PROJECT env) required for mode=bq|both")
