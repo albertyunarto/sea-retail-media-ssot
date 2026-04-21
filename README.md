@@ -157,15 +157,11 @@ Outputs:
 
 Full docs: [`docs/simulation.md`](docs/simulation.md).
 
-## Modeling consumers
+## Measurement framework
 
-`mart.daily_channel_panel` is the sole consumer-facing table. Three common use cases:
+`mart.daily_channel_panel` is the sole consumer-facing table. It's built to feed four named consumers: daily spend + conversion visibility, multivariate regression, causal-impact studies (geo holdouts, on/off switches, seasonal lift), and a light MMM over 12–18 months of history with adstock + Hill saturation priors.
 
-- **Causal Impact** (BSTS): filter to `(market, platform)`, target `platform_total_gmv_usd`, use other markets / sister SKUs as controls.
-- **Multivariate regression**: target `log(platform_total_gmv_usd + 1)`, features `log(1 + spend_usd)` per channel + `is_payday` + `is_weekend` + `week_of_year`.
-- **Meridian / Light MMM**: the panel is already `time × geo × channel` with `spend_usd` and `impressions`. Apply adstock + Hill saturation per channel; priors anchored to reported-ROAS columns, widened 2–3× for the posterior.
-
-See `SEA_Retail_Media_SSOT.docx` §9 for the detailed modeling pathway and §7 for the heuristics (attribution windows, double counting, voucher-funded spend, etc.) that this pipeline encodes.
+The full charter — modeling goals, source inventory (6 Supermetrics connectors + EVC extension), the canonical daily-report spec (dual-axis spend vs GMV, share-of-spend vs share-of-GMV, attribution-noted ROAS, payday / mega-sale overlay), and the future-work queue — lives in **[`docs/measurement_framework.md`](docs/measurement_framework.md)**. Read it before onboarding onto analytics work.
 
 ## Runbook (1-pager)
 

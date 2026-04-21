@@ -9,6 +9,17 @@ TikTok Ads is intentionally a small, sub-1× line.
 Design is "Analytical Terminal" — cool palette, Inter Tight + IBM Plex Mono,
 hairline rules, no warm tones. Ported from the Claude Design handoff bundle.
 
+## Measurement framework
+
+This dashboard is one of four consumers of `mart.daily_channel_panel`
+(visibility, multivariate regression, causal impact, light MMM). The
+canonical scope — 6 SEA markets, source inventory, modeling goals, and
+the **sample daily report** spec the views are built against — lives in
+[`../docs/measurement_framework.md`](../docs/measurement_framework.md).
+Read it before adding new views or schemas; it records the future-work
+queue (mega-sale flag, direct-vs-broad ROAS in the mart, `/daily-report`
+route, data-issue anomaly flag) this dashboard will grow into.
+
 ## Status
 
 **Phase 1 + 2 shipped.** All four Overview lenses + the Channel Brief are
