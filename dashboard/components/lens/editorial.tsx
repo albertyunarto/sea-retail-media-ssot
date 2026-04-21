@@ -509,7 +509,7 @@ export function EditorialLens({
           title="Channel performance, ranked"
           byline={`${CHANNELS.length} channels · sorted by priority / wallet share`}
         >
-          <a href="/channel" style={{ textDecoration: "none" }}>
+          <a href="/advanced?tab=channel" style={{ textDecoration: "none" }}>
             <button style={ghostBtn}>DEEP-DIVE →</button>
           </a>
         </SectionHead>

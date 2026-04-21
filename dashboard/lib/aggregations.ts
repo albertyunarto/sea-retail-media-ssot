@@ -225,3 +225,22 @@ export function computeChannelTrend(
     return { date: d, spend, roas: spend > 0 ? adsGmv / spend : 0 };
   });
 }
+
+/** Anomaly signal for the ranked channel table on the main page.
+ *  - 'spike' — spend WoW > +25%
+ *  - 'slump' — spend WoW < −20% OR ROAS shift < −15%
+ *  - 'healthy' — inside normal band
+ *  Returns a short human label alongside the level. */
+export type AnomalyLevel = "spike" | "slump" | "healthy";
+export interface Anomaly {
+  level: AnomalyLevel;
+  label: string;
+}
+export function computeAnomaly(c: ChannelDelta): Anomaly {
+  const spend = c.spendDelta ?? 0;
+  const roasShift = c.roasShiftPct ?? 0;
+  if (spend < -0.2) return { level: "slump", label: `Spend down ${(spend * 100).toFixed(0)}%` };
+  if (roasShift < -0.15) return { level: "slump", label: `ROAS down ${(roasShift * 100).toFixed(0)}%` };
+  if (spend > 0.25) return { level: "spike", label: `Spend up ${(spend * 100).toFixed(0)}%` };
+  return { level: "healthy", label: "Stable" };
+}
